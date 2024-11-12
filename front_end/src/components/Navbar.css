@@ -1,0 +1,85 @@
+.main-header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+  background-color: #ffffff;
+  justify-content: space-between; 
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-center {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 453px;
+  height: 44px;
+  background-color: #F0F2F5;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: #F0F2F5;
+  color: #959ead;
+  margin-right: 10px;
+}
+
+.search-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: #3B4146;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.icon-container,
+.profile-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.account-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.account-text span:first-child {
+  color: #637381;
+}
+
+.account-text span:last-child {
+  color: #161D25;
+  font-weight: 500;
+}

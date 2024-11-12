@@ -1,0 +1,21 @@
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+}
+
+.image-content {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 30px; 
+}
+
+.header img {
+  width: 90%;
+  height: 100%;
+  object-fit: cover;
+}
