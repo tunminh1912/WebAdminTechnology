@@ -33,7 +33,9 @@ user_router.post('/login', async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
         if (!isPasswordCorrect) return res.status(401).json("Wrong password");
 
-        res.status(200).json(user);
+        const token = jwt.sign({ id: user._id }, 'your_jwt_secret_key', { expiresIn: '1h' });
+        
+        res.status(200).json({ user, token });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Something went wrong during login' });
@@ -65,5 +67,24 @@ user_router.delete('/user/:id', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 });
+
+// Route lấy thông tin người dùng
+user_router.get('/profile', async (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  
+    jwt.verify(token.split(' ')[1], 'your_jwt_secret_key', async (err, decoded) => {
+      if (err) return res.status(403).json({ message: 'Invalid token' });
+  
+      try {
+        const user = await User.findById(decoded.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+  
+        res.status(200).json({ username: user.username, email: user.email }); // Trả về thông tin người dùng
+      } catch (error) {
+        res.status(500).json({ message: 'Error fetching user' });
+      }
+    });
+  });
 
 module.exports = user_router;
