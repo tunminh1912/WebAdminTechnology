@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
- const [error, setError] = useState(null); 
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -16,11 +16,11 @@ const Login = () => {
       if (response.status === 200) {
         const { token } = response.data;
         localStorage.setItem('token', token); 
-        navigate('/'); 
+        navigate('/');
       }
     } catch (error) {
       console.error('Login failed:', error);
-      setError('Tên người dùng hoặc mật khẩu không đúng.'); 
+      setError('Tên người dùng hoặc mật khẩu không đúng.');
     }
   };
 
@@ -91,6 +91,12 @@ const Login = () => {
             text-decoration: underline;
             cursor: pointer;
           }
+
+          .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+          }
         `}
       </style>
 
@@ -107,7 +113,7 @@ const Login = () => {
         />
         <button onClick={handleLogin}>Login</button>
 
-            {error && <div className="error-message">{error}</div>} {/* Hiển thị lỗi nếu có */}
+        {error && <div className="error-message">{error}</div>} {/* Hiển thị lỗi nếu có */}
 
         <div>
           <p>
