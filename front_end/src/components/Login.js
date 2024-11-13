@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+ const [error, setError] = useState(null); 
   const navigate = useNavigate();
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -19,6 +20,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Login failed:', error);
+      setError('Tên người dùng hoặc mật khẩu không đúng.'); 
     }
   };
 
@@ -104,6 +106,8 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
+
+            {error && <div className="error-message">{error}</div>} {/* Hiển thị lỗi nếu có */}
 
         <div>
           <p>
