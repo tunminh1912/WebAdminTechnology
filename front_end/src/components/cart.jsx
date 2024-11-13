@@ -1,10 +1,10 @@
-/* eslint-disable jsx-a11y/alt-text */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Navbar";
+import './Cart.css'; // Import file CSS
 
 function Cart() {
-  const [cartProducts, setcartProducts] = useState([]);
+  const [cartProducts, setCartProducts] = useState([]);
 
   useEffect(() => {
     async function fetchCart() {
@@ -12,7 +12,7 @@ function Cart() {
         const response = await axios.get(
           "http://localhost:3003/cart/672d6eea5d8c6f7abb9452f7"
         );
-        if (response.status === 200) setcartProducts(response.data?.products);
+        if (response.status === 200) setCartProducts(response.data?.products);
       } catch (error) {
         alert(`Lỗi khi hiển thị sản phẩm trong giỏ hàng: ${error}`);
       }
@@ -23,11 +23,11 @@ function Cart() {
   const [selectedProducts, setSelectProducts] = useState([]);
 
   const handleSelectProduct = (product) => {
-    if (
-      selectedProducts.some(
-        (item) => item.productId._id === product.productId._id
-      )
-    ) {
+    const isSelected = selectedProducts.some(
+      (item) => item.productId._id === product.productId._id
+    );
+    
+    if (isSelected) {
       const nextProductList = selectedProducts.filter(
         (productItem) => productItem.productId._id !== product.productId._id
       );
@@ -37,138 +37,98 @@ function Cart() {
     }
   };
 
-  function totalMonney(productList) {
+  function totalMoney(productList) {
     return productList.reduce(
       (total, product) => total + product?.productId?.price * product.quanlity,
       0
     );
   }
 
+  const handlePayment = () => {
+    if (selectedProducts.length > 0) {
+      // Điều hướng người dùng đến trang thanh toán, có thể truyền dữ liệu sản phẩm
+    } else {
+      alert("Bạn chưa chọn sản phẩm để thanh toán!");
+    }
+  };
+
+  const handleRemoveProduct = (product) => {
+    const nextProductList = cartProducts.filter(
+      (item) => item.productId._id !== product.productId._id
+    );
+    setCartProducts(nextProductList);
+  };
+
   return (
-    <><Header /><div>
-      <div style={{ display: "flex" }}>
-        <ul>
+    <>
+      <Header />
+      <div className="cart-container">
+        <ul className="cart-table">
           <h2>Giỏ hàng</h2>
           <table>
             <tbody>
               {cartProducts?.length > 0 ? (
                 cartProducts.map((product, key) => (
-                  <tr className="cart-product">
-                    <td style={{ padding: "10px" }}>
+                  <tr className="cart-product" key={key}>
+                    <td>
                       <input
                         type="checkbox"
                         className="checkbox"
                         size="large"
                         onChange={() => handleSelectProduct(product)}
-                        checked={selectedProducts?.includes(product)}
-                      ></input>
+                        checked={selectedProducts.some(
+                          (item) => item.productId._id === product.productId._id
+                        )}
+                      />
                     </td>
-                    <td style={{ padding: "10px" }}>
+                    <td>
                       <img
                         src={product?.productId.image_product}
                         alt={product?.productId.name_product}
-                        style={{ width: "100px" }}
-                      ></img>
-                    </td>
-                    <td style={{ padding: "10px" }}>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: "18px",
-                          fontWeight: "bold",
-                          width: "400px",
-                        }}
-                      >
-                        {product?.productId.name_product}
-                      </p>
-                      {/* <span style={{ fontSize: "12px", color: "gray" }}>
-                  {product?.productId.brand}
-                </span> */}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        color: "green",
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {product?.productId.price}
-                    </td>
-                    <td style={{ padding: "10px" }}>
-                      <button
-                        style={{
-                          border: "none",
-                          background: "none",
-                          fontSize: "18px",
-                        }}
-                      >
-                        -
-                      </button>
-                      <span style={{ margin: "0 10px", fontSize: "18px" }}>
-                        {product?.quanlity}
-                      </span>
-                      <button
-                        style={{
-                          border: "none",
-                          background: "none",
-                          fontSize: "18px",
-                        }}
-                      >
-                        +
-                      </button>
+                      />
                     </td>
                     <td>
-                      <p>Xóa</p>
+                      <p>{product?.productId.name_product}</p>
+                    </td>
+                    <td>
+                      <p>{product?.productId.price}</p>
+                    </td>
+                    <td>
+                      <button>-</button>
+                      <span>{product?.quanlity}</span>
+                      <button>+</button>
+                    </td>
+                    <td>
+                      <p className="remove" onClick={() => handleRemoveProduct(product)}>
+                        Xóa
+                      </p>
                     </td>
                   </tr>
                 ))
               ) : (
-                <> Giỏ hàng trống</>
+                <>Giỏ hàng trống</>
               )}
             </tbody>
           </table>
         </ul>
-        <ul>
+        <ul className="selected-products-table">
           <h2>Các sản phẩm đã chọn</h2>
           <table>
             <tbody>
               {selectedProducts?.length > 0 ? (
-                selectedProducts.map((product) => (
-                  <tr>
-                    <td style={{ padding: "10px" }}>
+                selectedProducts.map((product, key) => (
+                  <tr key={key}>
+                    <td>
                       <img
                         src={product?.productId.image_product}
                         alt={product?.productId.name_product}
-                        style={{ width: "75px" }}
-                      ></img>
+                      />
                     </td>
                     <td>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          width: "250px",
-                        }}
-                      >
-                        {product?.productId.name_product}
-                      </p>
-                      {/* <span style={{ fontSize: "10px", color: "gray" }}>
-                  {product?.productId.brand}
-                </span> */}
+                      <p>{product?.productId.name_product}</p>
                     </td>
                     <td>
-                      <p
-                        style={{
-                          textAlign: "center",
-                          color: "green",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {product?.productId.price}
-                      </p>
+                      <p>{product?.productId.price}</p>
                       <span>SL: {product?.quanlity}</span>
                     </td>
                   </tr>
@@ -178,10 +138,15 @@ function Cart() {
               )}
             </tbody>
           </table>
-          <h3>Tổng số tiền: {totalMonney(selectedProducts)}</h3>
+          <h3 className="total-money">Tổng số tiền: {totalMoney(selectedProducts)}</h3>
+          {selectedProducts.length > 0 && (
+            <button className="payment-button" onClick={handlePayment}>
+              Thanh toán
+            </button>
+          )}
         </ul>
       </div>
-    </div></>
+    </>
   );
 }
 
