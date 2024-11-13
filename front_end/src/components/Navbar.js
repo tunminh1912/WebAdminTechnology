@@ -58,6 +58,19 @@ const SearchField = () => {
 };
 
 const Header = () => {
+
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleProfileClick = () => {
+    navigate(isLoggedIn ? '/profile' : '/login');
+  };
+  
   return (
     <div className="main-header">
       <div className="header-center">
@@ -65,7 +78,9 @@ const Header = () => {
       </div>
       <div className="header-right">
         <CartIcon />
-        <img src={profile} alt="Profile Icon" className="profile-icon" />
+        <img src={profile} alt="Profile Icon" className="profile-icon" 
+         onClick={handleProfileClick}  
+         style={{ cursor: 'pointer' }}/>
       </div>
     </div>
   );
