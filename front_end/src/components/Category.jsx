@@ -133,7 +133,9 @@ const CategoryComponent = () => {
                 className="product-image" 
               />
               <p className="product-name">{product.name_product}</p>
-              <p className="product-price">${product.price}</p>
+              <p className="product-price">
+    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+</p>
               <Grid2 className="add-to-cart-btn" onClick={(event)=>{event.stopPropagation();handleAddToCart(product._id)}}>Add to Cart</Grid2>
             </div>
             </Grid>
