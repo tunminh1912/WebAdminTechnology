@@ -7,6 +7,7 @@ const Product = require('./Model/product');
 const Category = require('./Model/category');
 const cart_router = require('./routers/cart')
 const user_router = require('./routers/user');
+const Search = require('./routers/search');
 
 const app = express();
 app.use(cors());
@@ -30,6 +31,7 @@ app.use('/user', user_router);
 app.use('/categories', categoryRouter)
 app.use('/products', router)
 app.use('/cart', cart_router)
+app.use('/searchs',Search)
 
 // GET: Lấy tất cả sản phẩm
 app.get('/products', async (req, res) => {
