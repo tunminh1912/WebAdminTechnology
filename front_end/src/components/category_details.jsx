@@ -3,6 +3,7 @@ import './Category.css'; // Updated CSS file with new class names
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Grid } from '@mui/material';
+import Header from "./Navbar";
 
 function Product() {
     const [products, setProducts] = useState([]);
@@ -50,22 +51,29 @@ function Product() {
       }
 
     return (
-        <div className="product-grid">
-            {products.length > 0 && 
-                products.map((product) => (
-                    <div key={product.product_id} className="product-container" onClick={() => navigate(`/products/${product.product_id}`)}>
-                        <img
-                            src={product.image_product} 
-                            alt={product.name_product}
-                            className="product-image"
-                        />
-                        <p className="product-name">{product.name_product}</p>
-                        <p className="product-price">${product.price}</p>
-                        <Grid className="add-to-cart-btn" onClick={(event)=>{event.stopPropagation();handleAddToCart(product._id)}}>Add to Cart</Grid>
-                    </div>
-                ))
-            }
-        </div>
+        <>
+            <Header /> 
+            <div className="product-grid">
+                {products.length > 0 && 
+                    products.map((product) => (
+                        <div key={product.product_id} className="product-container" onClick={() => navigate(`/products/${product.product_id}`)}>
+                            <img
+                                src={product.image_product} 
+                                alt={product.name_product}
+                                className="product-image"
+                            />
+                            <p className="product-name">{product.name_product}</p>
+                            <p className="product-price">
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                            </p>
+                            <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
+                                Add to Cart
+                            </Grid>
+                        </div>
+                    ))
+                }
+            </div>
+        </>
     );
 }
 
