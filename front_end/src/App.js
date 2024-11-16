@@ -8,6 +8,7 @@ import './styles/global.css';
 import Product from './components/category_details';
 import Productdetails from './components/product_details';
 import Cart from './components/cart';
+import SearchResultsPage from './components/Search';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/search-results" element={<SearchResultsPage />} />
         </Routes>
     </Router>
   );
