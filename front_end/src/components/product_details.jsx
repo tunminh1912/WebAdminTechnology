@@ -3,11 +3,12 @@ import './Category.css';
 import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
+import Header from "./Navbar";
 
 function Productdetails() {
     const { id } = useParams();  
     const [product, setProduct] = useState(null);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProduct() {
@@ -25,7 +26,6 @@ function Productdetails() {
         fetchProduct();
     }, [id]);
 
-
     const handleAddToCart = async (productId) => {
         if(productId !== null){
           const data = {
@@ -41,8 +41,8 @@ function Productdetails() {
                   },
               });
                if (response.status === 200){
-                 alert('Add to cart successfull')
-                 navigate('/cart')
+                 alert('Add to cart successfull');
+                 navigate('/cart');
                } 
              } catch (error) {
                console.log(error?.message);
@@ -50,26 +50,30 @@ function Productdetails() {
         }
       }
     
-    
     return (
-        <div className="product-details-container">
-            {product && (  
-                <Stack spacing={3}>
-                    <img
-                        src={product.image_product} 
-                        alt={product.name_product}
-                    />
-                    <Stack>
-                        <p className="product-name">{product.name_product}</p>
-                        <p className="product-price">${product.price}</p>
-                        <p className="product-description">{product.description}</p>                        
+        <>
+            <Header /> 
+            <div className="product-details-container">
+                {product && (  
+                    <Stack spacing={3}>
+                        <img
+                            src={product.image_product} 
+                            alt={product.name_product}
+                        />
+                        <Stack>
+                            <p className="product-name">{product.name_product}</p>
+                            <p className="product-price">
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                            </p>
+                            <p className="product-description">{product.description}</p>                        
+                        </Stack>
+                        <input type="number" name="quanlity" id="soluong" />
+                        <button onClick={() => { handleAddToCart(product?._id) }}>Add to cart</button>
                     </Stack>
-                    <input type="number" name="quanlity" id="soluong"></input>
-                    <button onClick={()=>{handleAddToCart(product?._id)}}>Add to cart</button>
-                </Stack>
-            )}
-        </div>
+                )}
+            </div>
+        </>
     );
-    
 }
+
 export default Productdetails;
