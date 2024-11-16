@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import search from '../assets/search.png';
