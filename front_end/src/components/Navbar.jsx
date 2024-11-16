@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// Header.js
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import search from '../assets/search.png';
 import Person from '@mui/icons-material/Person';
@@ -10,14 +11,12 @@ import axios from 'axios';
 
 const CartIcon = () => {
   const navigate = useNavigate();
-
   const [cartProduct, setcartProduct] = useState([]);
+
   useEffect(() => {
     async function fetchCartProduct() {
       try {
-        const response = await axios.get(
-          `http://localhost:3003/cart/672d6eea5d8c6f7abb9452f7`
-        );
+        const response = await axios.get(`http://localhost:3003/cart/672d6eea5d8c6f7abb9452f7`);
         if (response.status === 200) setcartProduct(response.data);
       } catch (error) {
         console.log('Error fetching carts:', error.message);
@@ -46,7 +45,21 @@ const CartIcon = () => {
 };
 
 const SearchField = () => {
-  const [searchText, setSearchText] = React.useState('');
+  const [searchText, setSearchText] = useState('');
+  const navigate = useNavigate();
+
+  // Hàm tìm kiếm sản phẩm
+  const handleSearch = async () => {
+    if (searchText.trim()) {
+      try {
+        const response = await axios.get(`http://localhost:3003/searchs/products/search?query=${searchText}`);
+        console.log('Search Results:', response.data);
+        navigate('/search-results', { state: { results: response.data } }); 
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
+    }
+  };
 
   return (
     <div className="search-container">
@@ -57,7 +70,7 @@ const SearchField = () => {
         onChange={(e) => setSearchText(e.target.value)}
         className="search-input"
       />
-      <button className="search-button">
+      <button className="search-button" onClick={handleSearch}>
         <img src={search} alt="Search Icon" className="search-icon" />
       </button>
     </div>
@@ -85,7 +98,7 @@ const Header = () => {
       </div>
 
       <div className="header-center">
-        <SearchField />
+        <SearchField />  {/* Thêm SearchField vào đây */}
       </div>
 
       <div className="header-right">
