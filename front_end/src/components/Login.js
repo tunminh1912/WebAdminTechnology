@@ -14,8 +14,9 @@ const Login = () => {
       const response = await axios.post('http://localhost:3003/api/login', { username, password });
 
       if (response.status === 200) {
-        const { token } = response.data;
-        localStorage.setItem('token', token); 
+        const { user,token } = response.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId',user?._id)
         navigate('/');
       }
     } catch (error) {

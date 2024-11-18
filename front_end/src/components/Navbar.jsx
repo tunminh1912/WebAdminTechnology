@@ -11,18 +11,26 @@ import axios from 'axios';
 const CartIcon = () => {
   const navigate = useNavigate();
   const [cartProduct, setcartProduct] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
-    async function fetchCartProduct() {
-      try {
-        const response = await axios.get(`http://localhost:3003/cart/672d6eea5d8c6f7abb9452f7`);
-        if (response.status === 200) setcartProduct(response.data);
-      } catch (error) {
-        console.log('Error fetching carts:', error.message);
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+
+    if(isLoggedIn){
+      async function fetchCartProduct() {
+        const userId = localStorage.getItem('userId', null)
+        try {
+          const response = await axios.get(`http://localhost:3003/cart/${userId}`);
+          if (response.status === 200) setcartProduct(response.data);
+        } catch (error) {
+          console.log('Error fetching carts:', error.message);
+        }
       }
+      fetchCartProduct();
     }
-    fetchCartProduct();
-  }, []);
+  }, [isLoggedIn]);
 
   const productCount = cartProduct?.products?.length || 0;
 
@@ -30,7 +38,12 @@ const CartIcon = () => {
     <div className="icon-container">
       <IconButton
         onClick={() => {
-          navigate('/cart');
+          if(isLoggedIn){
+            navigate('/cart');
+          }else{
+            alert("Login to view cart")
+            navigate('/login')
+          }
         }}
         size="large"
         color="inherit"

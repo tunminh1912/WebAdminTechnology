@@ -52,6 +52,7 @@ const CategoryTitle = () => {
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,32 +73,40 @@ const CategoryComponent = () => {
         console.error('Error fetching products:', error.response || error.message || error);
       }
     };
+
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
   
     fetchCategories();
     fetchProducts();
   }, []);
 
   const handleAddToCart = async (productId) => {
-    if(productId !== null){
-      const data = {
-        userId: "672d6eea5d8c6f7abb9452f7",
-        productId,
-        quanlity: 1,
-      }
-
-        try {
-          const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
-            headers: {
-              "Content-Type": "application/json",
-              },
-          });
-           if (response.status === 200){
-             alert('Add to cart successfull')
-             navigate('/cart')
-           } 
-         } catch (error) {
-           console.log(error?.message);
+    if(isLoggedIn){
+      if(productId !== null){
+        const data = {
+          userId: localStorage.getItem('userId', null),
+          productId,
+          quantity: 1,
         }
+  
+        console.log(data)
+          try {
+            const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
+              headers: {
+                "Content-Type": "application/json",
+                },
+            });
+             if (response.status === 200){
+               alert('Add to cart successfull')
+             } 
+           } catch (error) {
+             console.log(error?.message);
+          }
+      }
+    }else{
+      alert("Login to add cart")
+      navigate('/login')
     }
   }
   

@@ -8,6 +8,7 @@ import Header from "./Navbar";
 function Productdetails() {
     const { id } = useParams();  
     const [product, setProduct] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,30 +24,34 @@ function Productdetails() {
                 console.log(error?.message);
             }
         }
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
         fetchProduct();
     }, [id]);
 
     const handleAddToCart = async (productId) => {
-        if(productId !== null){
-          const data = {
-            userId: "672d6eea5d8c6f7abb9452f7",
-            productId,
-            quanlity: document.getElementById("soluong").value,
-          }
-
-            try {
-              const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
-                headers: {
-                  "Content-Type": "application/json",
-                  },
-              });
-               if (response.status === 200){
-                 alert('Add to cart successfull');
-                 navigate('/cart');
-               } 
-             } catch (error) {
-               console.log(error?.message);
-            }
+        if(isLoggedIn){
+            if(productId !== null){
+                const data = {
+                  userId: localStorage.getItem('userId', null),
+                  productId,
+                  quantity: document.getElementById("soluong").value,
+                }
+      
+                  try {
+                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
+                      headers: {
+                        "Content-Type": "application/json",
+                        },
+                    });
+                     if (response.status === 200){
+                       alert('Add to cart successfull');
+                       navigate('/cart');
+                     } 
+                   } catch (error) {
+                     console.log(error?.message);
+                  }
+              }
         }
       }
     

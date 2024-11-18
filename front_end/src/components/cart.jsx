@@ -5,12 +5,13 @@ import './Cart.css'; // Import file CSS
 
 function Cart() {
   const [cartProducts, setCartProducts] = useState([]);
+  const userId = localStorage.getItem('userId', null)
 
-  useEffect(() => {
+  useEffect(() => {    
     async function fetchCart() {
       try {
         const response = await axios.get(
-          "http://localhost:3003/cart/672d6eea5d8c6f7abb9452f7"
+          `http://localhost:3003/cart/${userId}`
         );
         if (response.status === 200) setCartProducts(response.data?.products);
       } catch (error) {
@@ -18,7 +19,7 @@ function Cart() {
       }
     }
     fetchCart();
-  }, []);
+  }, [userId]);
 
   const [selectedProducts, setSelectProducts] = useState([]);
 
@@ -39,25 +40,102 @@ function Cart() {
 
   function totalMoney(productList) {
     return productList.reduce(
-      (total, product) => total + product?.productId?.price * product.quanlity,
+      (total, product) => total + product?.productId?.price * product.quantity,
       0
     );
   }
 
-  const handlePayment = () => {
+  async function handlePayment () {
     if (selectedProducts.length > 0) {
       // Điều hướng người dùng đến trang thanh toán, có thể truyền dữ liệu sản phẩm
+      try {
+        const total = totalMoney(selectedProducts)
+        const newPayment = {
+          products: selectedProducts,
+          amount: total,
+          bankCode: null,
+          language: "vn"
+        }
+        console.log(newPayment)
+        const response = await axios.post('http://localhost:3003/vnpay/create_payment_url',newPayment)
+        if(response.status === 200 && response.data){
+          window.location.href = response.data.paymentUrl;
+        }
+      } catch (error) {
+        alert(`Lỗi: ${error?.message}`)
+      }
     } else {
       alert("Bạn chưa chọn sản phẩm để thanh toán!");
     }
   };
 
-  const handleRemoveProduct = (product) => {
-    const nextProductList = cartProducts.filter(
-      (item) => item.productId._id !== product.productId._id
-    );
-    setCartProducts(nextProductList);
+  const handleRemoveProduct = async (product) => {
+    try {
+      const productId = product.productId
+
+      const response = await axios.post('http://localhost:3003/cart/delete_product_cart',{
+        userId,
+        productId
+      })
+
+      if(response.status === 200){
+        setCartProducts((prevProducts) =>
+          prevProducts.filter((p) => p.productId !== productId))
+      }
+    } catch (error) {
+      console.error('Error delete product:', error);
+    }
   };
+
+  const handleIncrease = async (product) => {
+    const updatedQuantity = product.quantity + 1;
+
+    try {
+        const response = await axios.post('http://localhost:3003/cart/update', {
+            userId,
+            productId: product.productId._id,
+            quantity: updatedQuantity,
+        });
+
+        if (response.status === 200) {
+          setCartProducts((prev) =>
+              prev.map((item) =>
+                  item.productId._id === product.productId._id
+                      ? { ...item, quantity: updatedQuantity }
+                      : item
+              )
+          );
+      }
+    } catch (error) {
+        console.error('Error updating product quantity:', error);
+    }
+  };
+
+  const handleDecrease = async (product) => {
+    const updatedQuantity = Math.max(product.quantity - 1, 0);
+
+    try {
+        const response = await axios.post('http://localhost:3003/cart/update', {
+            userId,
+            productId: product.productId._id,
+            quantity: updatedQuantity,
+        });
+
+         if (response.status === 200) {
+          setCartProducts((prev) =>
+              prev.map((item) =>
+                  item.productId._id === product.productId._id
+                      ? { ...item, quantity: updatedQuantity }
+                      : item
+              )
+          );
+      } 
+    } catch (error) {
+        console.error('Error updating product quantity:', error);
+    }
+  };
+
+
 
   return (
     <>
@@ -94,9 +172,9 @@ function Cart() {
                       <p>{product?.productId.price}</p>
                     </td>
                     <td>
-                      <button>-</button>
-                      <span>{product?.quanlity}</span>
-                      <button>+</button>
+                      <button onClick={()=>handleDecrease(product)}>-</button>
+                      <span>{product?.quantity}</span>
+                      <button onClick={()=>handleIncrease(product)}>+</button>
                     </td>
                     <td>
                       <p className="remove" onClick={() => handleRemoveProduct(product)}>
@@ -129,7 +207,7 @@ function Cart() {
                     </td>
                     <td>
                       <p>{product?.productId.price}</p>
-                      <span>SL: {product?.quanlity}</span>
+                      <span>SL: {product?.quantity}</span>
                     </td>
                   </tr>
                 ))

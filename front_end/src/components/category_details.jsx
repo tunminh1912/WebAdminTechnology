@@ -2,11 +2,11 @@ import axios from 'axios';
 import './Category.css'; // Updated CSS file with new class names
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Grid } from '@mui/material';
 import Header from "./Navbar";
 
 function Product() {
     const [products, setProducts] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const category_id = queryParams.get('category');  
@@ -24,29 +24,36 @@ function Product() {
             }
         }
         if (category_id) fetchProducts();
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
     }, [category_id]);
 
     const handleAddToCart = async (productId) => {
-        if(productId !== null){
-          const data = {
-            userId: "672d6eea5d8c6f7abb9452f7",
-            productId,
-            quanlity: 1,
-          }
-    
-            try {
-              const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
-                headers: {
-                  "Content-Type": "application/json",
-                  },
-              });
-               if (response.status === 200){
-                 alert('Add to cart successfull')
-                 navigate('/cart')
-               } 
-             } catch (error) {
-               console.log(error?.message);
-            }
+        if(isLoggedIn){
+            if(productId !== null){
+                const data = {
+                  userId: localStorage.getItem('userId', null),
+                  productId,
+                  quantity: document.getElementById("soluong").value,
+                }
+          
+                  try {
+                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
+                      headers: {
+                        "Content-Type": "application/json",
+                        },
+                    });
+                     if (response.status === 200){
+                       alert('Add to cart successfull')
+                       navigate('/cart')
+                     } 
+                   } catch (error) {
+                     console.log(error?.message);
+                  }
+              }
+        }else{
+            alert("Login to add cart")
+            navigate('/login')
         }
       }
 
@@ -66,9 +73,8 @@ function Product() {
                             <p className="product-price">
                                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                             </p>
-                            <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
-                                Add to Cart
-                            </Grid>
+                            <input type="number" name="quanlity" id="soluong" />
+                            <button onClick={() => { handleAddToCart(product?._id) }}>Add to cart</button>
                         </div>
                     ))
                 }
