@@ -9,6 +9,7 @@ const cart_router = require('./routers/cart')
 const user_router = require('./routers/user');
 const Search = require('./routers/search');
 const vnpay_router = require('./routers/vnpay')
+const commentRoutes = require('./routers/comments');
 
 const app = express();
 app.use(cors());
@@ -34,6 +35,7 @@ app.use('/products', router)
 app.use('/cart', cart_router)
 app.use('/searchs',Search)
 app.use('/vnpay', vnpay_router)
+app.use('/rate', commentRoutes);
 
 // GET: Lấy tất cả sản phẩm
 app.get('/products', async (req, res) => {

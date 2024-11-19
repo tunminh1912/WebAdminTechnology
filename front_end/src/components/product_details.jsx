@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
+import CommentSection from './CommentSection';
 
 function Productdetails() {
     const { id } = useParams();  
@@ -55,7 +56,7 @@ function Productdetails() {
         }
       }
     
-    return (
+      return (
         <>
             <Header /> 
             <div className="product-details-container">
@@ -77,8 +78,9 @@ function Productdetails() {
                     </Stack>
                 )}
             </div>
+            <CommentSection productId={id} />
         </>
-    );
+    ); 
 }
 
 export default Productdetails;

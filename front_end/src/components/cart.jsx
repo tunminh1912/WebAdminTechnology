@@ -169,7 +169,9 @@ function Cart() {
                       <p>{product?.productId.name_product}</p>
                     </td>
                     <td>
-                      <p>{product?.productId.price}</p>
+                    <p className="product-price">
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.productId?.price)}
+                      </p>
                     </td>
                     <td>
                       <button onClick={()=>handleDecrease(product)}>-</button>
@@ -206,7 +208,9 @@ function Cart() {
                       <p>{product?.productId.name_product}</p>
                     </td>
                     <td>
-                      <p>{product?.productId.price}</p>
+                    <p className="product-price">
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.productId?.price)}
+                      </p>
                       <span>SL: {product?.quantity}</span>
                     </td>
                   </tr>
@@ -216,7 +220,9 @@ function Cart() {
               )}
             </tbody>
           </table>
-          <h3 className="total-money">Tổng số tiền: {totalMoney(selectedProducts)}</h3>
+          <h3 className="total-money">
+            Tổng số tiền: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalMoney(selectedProducts))}
+          </h3>
           {selectedProducts.length > 0 && (
             <button className="payment-button" onClick={handlePayment}>
               Thanh toán
