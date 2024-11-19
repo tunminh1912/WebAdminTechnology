@@ -13,14 +13,13 @@ const CartIcon = () => {
   const [cartProduct, setcartProduct] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
 
-    if(isLoggedIn){
+    if (isLoggedIn) {
       async function fetchCartProduct() {
-        const userId = localStorage.getItem('userId', null)
+        const userId = localStorage.getItem('userId', null);
         try {
           const response = await axios.get(`http://localhost:3003/cart/${userId}`);
           if (response.status === 200) setcartProduct(response.data);
@@ -38,11 +37,11 @@ const CartIcon = () => {
     <div className="icon-container">
       <IconButton
         onClick={() => {
-          if(isLoggedIn){
+          if (isLoggedIn) {
             navigate('/cart');
-          }else{
-            alert("Login to view cart")
-            navigate('/login')
+          } else {
+            alert("Login to view cart");
+            navigate('/login');
           }
         }}
         size="large"
@@ -60,13 +59,12 @@ const SearchField = () => {
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
 
-  // Hàm tìm kiếm sản phẩm
   const handleSearch = async () => {
     if (searchText.trim()) {
       try {
         const response = await axios.get(`http://localhost:3003/searchs/products/search?query=${searchText}`);
         console.log('Search Results:', response.data);
-        navigate('/search-results', { state: { results: response.data } }); 
+        navigate('/search-results', { state: { results: response.data } });
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -91,6 +89,7 @@ const SearchField = () => {
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -98,19 +97,19 @@ const Header = () => {
   }, []);
 
   const handleProfileClick = () => {
-    window.location.href = isLoggedIn ? '/profile' : '/login';
+    navigate(isLoggedIn ? '/profile' : '/login');
   };
 
   return (
     <div className="main-header">
       <div className="header-left">
-        <div className="logo" onClick={() => (window.location.href = 'http://localhost:3000')}>
+        <div className="logo" onClick={() => navigate('/')}>
           OHMN
         </div>
       </div>
 
       <div className="header-center">
-        <SearchField />  {/* Thêm SearchField vào đây */}
+        <SearchField /> 
       </div>
 
       <div className="header-right">
