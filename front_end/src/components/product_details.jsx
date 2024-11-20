@@ -56,31 +56,44 @@ function Productdetails() {
         }
       }
     
-      return (
+ return (
         <>
             <Header /> 
-            <div className="product-details-container">
-                {product && (  
-                    <Stack spacing={3}>
-                        <img
-                            src={product.image_product} 
-                            alt={product.name_product}
-                        />
-                        <Stack>
-                            <p className="product-name">{product.name_product}</p>
-                            <p className="product-price">
-                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                            </p>
-                            <p className="product-description">{product.description}</p>                        
-                        </Stack>
-                        <input type="number" name="quanlity" id="soluong" />
-                        <button onClick={() => { handleAddToCart(product?._id) }}>Add to cart</button>
-                    </Stack>
-                )}
+            <div className="productDetailWrapper">
+    {product && (
+        <div className="productDetailContent">
+            <div className="productImageWrapper">
+                <img
+                    src={product.image_product}
+                    alt={product.name_product}
+                    className="productImage"
+                />
             </div>
+
+            <div className="productInfoWrapper">
+                <h1 className="productTitle">{product.name_product}</h1>
+                <p className="productCost">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                </p>
+                <p className="productDescription">{product.description}</p>
+                
+                    <div className="optionRow">
+                        <label>Số lượng:</label>
+                        <input type="number" name="quantity" id="soluong" min="1" defaultValue="1" />
+                    </div>
+            
+                <div className="productActionButtons">
+                    <button onClick={() => handleAddToCart(product?._id)} className="addToCartButton">
+                        Thêm Vào Giỏ Hàng
+                    </button>
+                    <button className="buyNowButton">Mua Ngay</button>
+                </div>
+            </div>
+        </div>
+    )}
+</div>
             <CommentSection productId={id} />
         </>
     ); 
 }
-
 export default Productdetails;
