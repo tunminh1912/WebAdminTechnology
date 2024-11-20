@@ -3,6 +3,7 @@ import './Category.css'; // Updated CSS file with new class names
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
+import Grid from '@mui/material/Grid';
 
 function Product() {
     const [products, setProducts] = useState([]);
@@ -73,8 +74,9 @@ function Product() {
                             <p className="product-price">
                                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                             </p>
-                            <input type="number" name="quanlity" id="soluong" />
-                            <button onClick={() => { handleAddToCart(product?._id) }}>Add to cart</button>
+                         <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
+                                Add to Cart
+                            </Grid>
                         </div>
                     ))
                 }
