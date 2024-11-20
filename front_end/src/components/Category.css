@@ -96,139 +96,248 @@
 
 
 
-
-/* Product Details Container */
-.product-details-container {
+/* Container chính */
+.productDetailWrapper {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 600px;
-  margin: 20px auto;
-  margin-left: 30px; /* Căn lề trái cách 30px */
+  justify-content: center;
   padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f8f8;
 }
 
-
-
-/* Image styling */
-.product-details-container img {
+.productDetailContent {
+  display: flex;
+  max-width: 1200px;
   width: 100%;
-  height: auto;
+  background: #fff;
+  padding: 20px;
   border-radius: 10px;
-  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Phần hình ảnh sản phẩm */
+.productImageWrapper {
+  flex: 1;
+  padding: 20px;
+}
+
+.productImage {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Phần thông tin sản phẩm */
+.productInfoWrapper {
+  flex: 2;
+  padding: 20px;
+}
+
+.productTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.productCost {
+  font-size: 20px;
+  color: #e40004;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.productDescription {
+  margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Thuộc tính sản phẩm */
+.productOptions {
   margin-bottom: 20px;
 }
 
-/* Text styling */
-.product-details-container .product-name {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+.optionRow {
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
-  text-align: left;
 }
 
-.product-details-container .product-price {
-  font-size: 20px;
-  font-weight: 600;
-  color: red;
+.optionRow label {
+  font-size: 16px;
+  margin-right: 10px;
+  width: 100px;
+}
+
+.colorChoices {
+  display: flex;
+  gap: 10px;
+}
+
+.colorButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.productActionButtons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.addToCartButton,
+.buyNowButton {
+  flex: 1;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-align: center;
+  min-width: 150px;
+  max-width: 200px;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.addToCartButton {
+  padding: 0 20px;
+  margin: 0;
+  background-color: #dc5e1f;
+  color: white;
+}
+
+.addToCartButton:hover {
+  background-color: #c23b12;
+}
+
+.buyNowButton {
+  padding: 0 20px;
+  margin: 0;
+  color: #f3f6f8;
+  background-color: #2a9528;
+}
+
+.buyNowButton:hover {
+  background-color: #14c51a;
+}
+
+
+
+
+.comment-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto; /* Căn giữa và thêm khoảng cách */
+  padding: 20px;
+  background-color: #ffffff; /* Đồng nhất với sản phẩm */
+  border: 2px solid #ece8e8; /* Viền nhẹ */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+}
+
+.comment-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: bold;
+  font-size: 22px;
+  color: #333;
   margin-bottom: 15px;
   text-align: left;
 }
 
-.product-details-container .product-description {
-  font-size: 16px;
-  color: #666;
-  line-height: 1.5;
-  text-align: left;
-}
-
-
-/* Comment Section */
-.comment-section {
-  width: 100%;
-  max-width: 580px; 
-  margin-top: 20px;
-  margin-left: 30px; /* Căn lề trái cách 30px */
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Tiêu đề phần bình luận */
-.comment-section h3 {
-  font-size: 18px; /* Kích thước chữ nhỏ hơn */
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-/* Comment form styling */
-.comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Giảm khoảng cách giữa các phần tử */
-}
-
-/* Textarea for comments */
 .comment-textarea {
-  width: 100%;
-  padding: 8px; 
-  font-size: 14px; 
+  width: 97%;
+  height: 100px;
+  margin-bottom: 15px;
+  padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 6px; 
-  min-height: 80px; 
-  resize: vertical;
-  background-color: #ffffff;
-  color: #333;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  font-size: 16px;
+  color: #555;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  resize: none;
 }
 
-/* Submit button for comments */
 .comment-submit-btn {
-  align-self: flex-start;
-  padding: 8px 12px; /* Thu nhỏ nút */
-  font-size: 12px; /* Kích thước chữ nhỏ hơn */
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
   font-weight: bold;
-  color: #ffffff;
-  background-color: #2196f3;
   border: none;
-  border-radius: 4px; /* Giảm độ bo góc */
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .comment-submit-btn:hover {
-  background-color: #1976d2;
+  background-color: #3e8e41;
 }
 
-.comment-submit-btn:active {
-  background-color: #0d47a1;
-  transform: scale(0.95);
+.comment-list {
+  margin-top: 20px;
 }
 
-/* Login prompt for comments */
-.login-prompt {
-  text-align: left;
-  font-size: 12px; /* Chữ nhỏ hơn */
-  color: #777;
-  margin-top: 8px; /* Khoảng cách nhỏ hơn */
-  font-style: italic;
+.comment-item {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-.comment-author {
+
+.comment-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-item-header p {
+  font-size: 14px;
   font-weight: bold;
+  color: #555;
+  margin: 0;
+}
+
+.comment-item-header .comment-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.comment-item-content {
   font-size: 14px;
   color: #333;
-  margin-bottom: 5px;
+  line-height: 1.5;
+  text-align: left; /* Canh lề trái */
+  margin-bottom: 10px;
 }
 
-.comment-text {
-  font-size: 14px;
-  color: #555;
-  margin-left: 10px;
+.delete-comment-btn {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px; 
+  cursor: pointer;
+  font-size: 12px; 
+  transition: all 0.3s ease;
+  position: absolute; 
+  top: 50%; /* Center vertically */
+  right: 10px; /* Align to the right side with some padding */
+  transform: translateY(-50%); /* Adjust the vertical alignment to be centered */
+  width: auto; 
+  height: auto; 
 }
 
+.delete-comment-btn:hover {
+  background-color: #ff7875;
+}
