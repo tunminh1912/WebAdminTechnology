@@ -1,7 +1,6 @@
 import axios from 'axios';
 import './Category.css';
 import React, { useEffect, useState } from 'react';
-import { Stack } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
 import CommentSection from './CommentSection';
