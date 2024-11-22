@@ -51,7 +51,7 @@ const CategoryTitle = () => {
 
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -59,12 +59,12 @@ const CategoryComponent = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get('http://localhost:3003/categories');
-        setCategories(response.data);  
+        setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error.response || error.message || error);
       }
     };
-  
+
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:3003/products');
@@ -76,40 +76,40 @@ const CategoryComponent = () => {
 
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-  
+
     fetchCategories();
     fetchProducts();
   }, []);
 
   const handleAddToCart = async (productId) => {
-    if(isLoggedIn){
-      if(productId !== null){
+    if (isLoggedIn) {
+      if (productId !== null) {
         const data = {
           userId: localStorage.getItem('userId', null),
           productId,
           quantity: 1,
         }
-  
+
         console.log(data)
-          try {
-            const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
-              headers: {
-                "Content-Type": "application/json",
-                },
-            });
-             if (response.status === 200){
-               alert('Add to cart successfull')
-             } 
-           } catch (error) {
-             console.log(error?.message);
+        try {
+          const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.status === 200) {
+            alert('Add to cart successfull')
           }
+        } catch (error) {
+          console.log(error?.message);
+        }
       }
-    }else{
+    } else {
       alert("Login to add cart")
       navigate('/login')
     }
   }
-  
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
       <CategoryTitle />
@@ -118,12 +118,12 @@ const CategoryComponent = () => {
           <Grid onClick={() => navigate(`products?category=${category.category_id}`)}>
             <Stack
               spacing={3}
-              style={{ cursor: 'pointer' }} > 
-              <CategoryItem 
-                image_category={category.image_category}  
+              style={{ cursor: 'pointer' }} >
+              <CategoryItem
+                image_category={category.image_category}
                 name_category={category.name_category}
                 category_id={category.category_id}
-                onClick={navigate}  
+                onClick={navigate}
               />
             </Stack>
           </Grid>
@@ -135,18 +135,18 @@ const CategoryComponent = () => {
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
           {products.map((product) => (
             <Grid key={product.product_id} onClick={() => navigate(`/products/${product.product_id}`)} style={{ cursor: 'pointer' }}>
-            <div key={product.product_id} className="product-container">
-              <img 
-                src={product.image_product} 
-                alt={product.name_product} 
-                className="product-image" 
-              />
-              <p className="product-name">{product.name_product}</p>
-              <p className="product-price">
-    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-</p>
-              <Grid2 className="add-to-cart-btn" onClick={(event)=>{event.stopPropagation();handleAddToCart(product._id)}}>Add to Cart</Grid2>
-            </div>
+              <div key={product.product_id} className="product-container">
+                <img
+                  src={product.image_product}
+                  alt={product.name_product}
+                  className="product-image"
+                />
+                <p className="product-name">{product.name_product}</p>
+                <p className="product-price">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                </p>
+                <Grid2 className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id) }}>Add to Cart</Grid2>
+              </div>
             </Grid>
           ))}
         </div>

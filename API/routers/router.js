@@ -53,19 +53,19 @@ router.post('/FormAddProduct/alert', upload.single('image_product'), async (req,
 router.delete('/:productId', async (req, res) => {
   const { productId } = req.params;  // Lấy productId từ URL
   try {
-      console.log('Deleting product with ID:', productId); // Log ID để kiểm tra
+    console.log('Deleting product with ID:', productId); // Log ID để kiểm tra
 
-      // Truy vấn với product_id
-      const deletedProduct = await Product.findOneAndDelete({ product_id: productId });
+    // Truy vấn với product_id
+    const deletedProduct = await Product.findOneAndDelete({ product_id: productId });
 
-      if (!deletedProduct) {
-          return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
-      }
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
+    }
 
-      res.status(200).json({ message: 'Sản phẩm đã được xóa thành công' });
+    res.status(200).json({ message: 'Sản phẩm đã được xóa thành công' });
   } catch (error) {
-      console.error('Error deleting product:', error);
-      res.status(500).json({ message: 'Lỗi khi xóa sản phẩm', error });
+    console.error('Error deleting product:', error);
+    res.status(500).json({ message: 'Lỗi khi xóa sản phẩm', error });
   }
 });
 router.get('/category/:category_id', async (req, res) => {

@@ -4,8 +4,8 @@ const { Cart } = require('../Model/cart')
 const router = express.Router()
 
 // xem thong tin tu gio hang
-router.get('/:userId', async(req,res)=>{
-    const {userId} = req.params
+router.get('/:userId', async (req, res) => {
+    const { userId } = req.params
     try {
         const cart = await Cart.findById(userId).populate({
             path: 'products.productId',
@@ -19,17 +19,17 @@ router.get('/:userId', async(req,res)=>{
         const productCount = cart.products.length;
         return res.status(200).json(cart)
     } catch (error) {
-        return res.status(500).json({error: 'Error fetching cart'})
-    } 
+        return res.status(500).json({ error: 'Error fetching cart' })
+    }
 })
 
 // them san pham vao cart
-router.post('/addproduct_cart', async (req,res)=>{
-    const { userId, productId, quantity} = req.body
+router.post('/addproduct_cart', async (req, res) => {
+    const { userId, productId, quantity } = req.body
     try {
         let cart = await Cart.findById(userId)
-        if(!cart){
-            cart = new Cart({_id: userId, products: [] })
+        if (!cart) {
+            cart = new Cart({ _id: userId, products: [] })
         }
 
         // Tìm sản phẩm trong giỏ hàng
@@ -37,9 +37,9 @@ router.post('/addproduct_cart', async (req,res)=>{
             (item) => item.productId.toHexString() === productId,
         )
 
-        if(existingProductIndex !== -1){
+        if (existingProductIndex !== -1) {
             cart.products[existingProductIndex].quantity += quantity
-        }else{
+        } else {
             cart.products.push({
                 productId,
                 quantity
@@ -89,13 +89,13 @@ router.post('/update', async (req, res) => {
 });
 
 
-router.post('/delete_product_cart', async (req,res)=>{
+router.post('/delete_product_cart', async (req, res) => {
     try {
-        const { userId, productId} = req.body
+        const { userId, productId } = req.body
         let updatedCart = await Cart.findByIdAndUpdate(
             userId,
-            {$pull: {products: {productId: productId}}}, // Sử dụng $pull để xóa
-            {new: true} // Trả về dữ liệu giỏ hàng sau khi cập nhật
+            { $pull: { products: { productId: productId } } }, // Sử dụng $pull để xóa
+            { new: true } // Trả về dữ liệu giỏ hàng sau khi cập nhật
         );
 
         if (!updatedCart) {

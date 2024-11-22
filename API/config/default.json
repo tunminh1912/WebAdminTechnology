@@ -1,6 +1,6 @@
 {
-  "vnp_TmnCode": "G7UJETAR",
-  "vnp_HashSecret": "GRQIVLXF3OOAPXGIMKBAX1BD91CP7ICH",
+  "vnp_TmnCode": "AOCGC105",
+  "vnp_HashSecret": "3RB291RZ2IF8HI1NAZKECSLBNBFMCK7E",
   "vnp_Url": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
   "vnp_Api": "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction",
   "vnp_ReturnUrl": "http://localhost:3003/vnpay/vnpay_return"

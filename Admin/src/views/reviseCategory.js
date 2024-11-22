@@ -11,7 +11,7 @@ const ReviseCategory = () => {
     name_category: '',
     image_category: null, // Thêm trường để lưu hình ảnh
   });
-  const [error, setError] = useState(''); 
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -20,7 +20,7 @@ const ReviseCategory = () => {
         if (response.data) {
           setCategory(response.data);
         } else {
-          setError('Danh mục không tồn tại'); 
+          setError('Danh mục không tồn tại');
         }
       } catch (error) {
         console.error('Error fetching category:', error);
@@ -47,12 +47,12 @@ const ReviseCategory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Tạo FormData để gửi dữ liệu
     const formData = new FormData();
     formData.append('category_id', category.category_id);
     formData.append('name_category', category.name_category);
-    
+
     // Kiểm tra và thêm hình ảnh vào FormData
     if (category.image_category) {
       formData.append('image_category', category.image_category);
@@ -77,7 +77,7 @@ const ReviseCategory = () => {
       <form onSubmit={handleSubmit}>
         <h1>Chỉnh sửa danh mục</h1>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>} 
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <label htmlFor="category_id">Mã danh mục:</label>
         <input

@@ -35,7 +35,7 @@ const SearchResultsPage = () => {
   };
   return (
     <div>
-      <Header /> 
+      <Header />
       <div className="search-results-page">
         <h2>Kết quả tìm kiếm</h2>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
@@ -53,14 +53,14 @@ const SearchResultsPage = () => {
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                 </p>
                 <Grid2
-                className="add-to-cart-btn"
-                onClick={(event) => {
-                  event.stopPropagation();  
-                  handleAddToCart(product._id); 
-                }}
-              >
-                Thêm vào giỏ
-              </Grid2>
+                  className="add-to-cart-btn"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAddToCart(product._id);
+                  }}
+                >
+                  Thêm vào giỏ
+                </Grid2>
               </div>
             ))
           ) : (

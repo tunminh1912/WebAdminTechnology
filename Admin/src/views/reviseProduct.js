@@ -139,10 +139,10 @@ const ReviseProducts = () => {
           {product.image_product && typeof product.image_product === 'string' && (
             <div>
               <br />
-              <img 
-                src={product.image_product} 
-                alt="Product" 
-                style={{ width: '200px', height: 'auto', display: 'block', marginBottom: '10px' }} 
+              <img
+                src={product.image_product}
+                alt="Product"
+                style={{ width: '200px', height: 'auto', display: 'block', marginBottom: '10px' }}
               />
             </div>
           )}
@@ -151,11 +151,11 @@ const ReviseProducts = () => {
             id="image_product"
             name="image_product"
             accept="image/*"
-            onChange={handleFileChange} 
+            onChange={handleFileChange}
           />
         </label>
         <br /><br />
-        
+
         <button type="submit">Lưu sản phẩm</button>
       </form>
     </div>

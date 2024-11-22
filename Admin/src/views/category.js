@@ -22,17 +22,17 @@ const Category = () => {
     const handleDelete = async (categoryId) => {
         try {
             await axios.delete(`http://localhost:3003/categories/${categoryId}`);
-          setCategory(category.filter(cat => cat.category_id !== categoryId));
-          alert('Danh mục đã được xóa thành công');
+            setCategory(category.filter(cat => cat.category_id !== categoryId));
+            alert('Danh mục đã được xóa thành công');
         } catch (error) {
-          console.error('Error deleting category:', error);
-          alert('Có lỗi xảy ra khi xóa danh mục');
+            console.error('Error deleting category:', error);
+            alert('Có lỗi xảy ra khi xóa danh mục');
         }
-      };
+    };
 
     return (
         <div>
-        <button onClick={()=> navigate("/categories/FormAddCategory")}>Add</button> {/* Gọi hàm handleAddProduct */}
+            <button onClick={() => navigate("/categories/FormAddCategory")}>Add</button> {/* Gọi hàm handleAddProduct */}
             <h2>Category Management</h2>
             <table>
                 <thead>
@@ -47,17 +47,17 @@ const Category = () => {
                 <tbody>
                     {category.map((category) => (
                         <tr key={category.category_id}>
-                        <td>{category.category_id}</td>
-                        <td>{category.name_category}</td>   
-                        <td><img src={`${category.image_category}`} alt={category.name_category} style={{ width: '100px' }} /></td>                                                    
-                        <td>
-                        <button onClick={() => navigate(`/reviseCategory/${category.category_id}`)}>Revise</button>
-              </td>
-              <td>
-                <button onClick={() => handleDelete(category.category_id)}>Delete</button>
-              </td>
-                </tr>
-            ))}
+                            <td>{category.category_id}</td>
+                            <td>{category.name_category}</td>
+                            <td><img src={`${category.image_category}`} alt={category.name_category} style={{ width: '100px' }} /></td>
+                            <td>
+                                <button onClick={() => navigate(`/reviseCategory/${category.category_id}`)}>Revise</button>
+                            </td>
+                            <td>
+                                <button onClick={() => handleDelete(category.category_id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

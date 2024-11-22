@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -14,9 +14,9 @@ const Login = () => {
       const response = await axios.post('http://localhost:3003/api/login', { username, password });
 
       if (response.status === 200) {
-        const { user,token } = response.data;
+        const { user, token } = response.data;
         localStorage.setItem('token', token);
-        localStorage.setItem('userId',user?._id)
+        localStorage.setItem('userId', user?._id)
         navigate('/');
       }
     } catch (error) {
@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   const navigateToRegister = () => {
-    navigate('/register'); 
+    navigate('/register');
   };
 
   return (
