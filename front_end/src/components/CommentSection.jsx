@@ -34,14 +34,14 @@ function CommentSection({ productId }) {
     // Xử lý khi người dùng gửi bình luận
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
-
+    
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Vui lòng đăng nhập để bình luận.');
             navigate('/login');
             return;
         }
-
+    
         if (comment && rating) {
             const data = {
                 userId: localStorage.getItem('userId'),
@@ -49,20 +49,17 @@ function CommentSection({ productId }) {
                 comment,
                 rating,
             };
-
+    
             try {
                 const response = await axios.post('http://localhost:3003/rate/rate', data, {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
-
+    
                 if (response.status === 200 && response.data.rate) {
-                    setSuccessMessage('Bình luận đã được thêm.');
-                    setErrorMessage('');
-                    setComment(""); // Reset comment
-                    setRating(0); // Reset rating
-                    setComments((prevComments) => [...prevComments, response.data.rate]); // Cập nhật danh sách bình luận
+                    alert('Bình luận thành công!');
+                    window.location.reload(); // Load lại trang sau khi bấm đóng alert
                 } else {
                     setErrorMessage("Có lỗi xảy ra khi gửi bình luận.");
                     setSuccessMessage('');
@@ -74,7 +71,7 @@ function CommentSection({ productId }) {
         } else {
             setErrorMessage("Vui lòng nhập bình luận và đánh giá sao.");
         }
-    };
+    };    
 
     // Xử lý đánh giá sao
     const handleRatingChange = (ratingValue) => {
