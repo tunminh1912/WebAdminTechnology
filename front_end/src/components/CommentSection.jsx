@@ -7,7 +7,7 @@ import './Category.css';
 function CommentSection({ productId }) {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
-    const [rating, setRating] = useState(0); // Giữ trạng thái rating
+    const [rating, setRating] = useState(0); 
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
@@ -17,31 +17,31 @@ function CommentSection({ productId }) {
         async function fetchComments() {
             try {
                 const response = await axios.get(`http://localhost:3003/rate/rate/${productId}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                 });
-                if (Array.isArray(response.data)) {
-                    setComments(response.data); // Set comments nếu là mảng
+
+                console.log(response.data);  
+                if (response.data && Array.isArray(response.data.users)) {
+                    setComments(response.data.users); // Use 'users' here
                 }
             } catch (error) {
                 console.log("Error fetching comments:", error?.message);
             }
         }
         fetchComments();
-    }, [productId]); // Khi productId thay đổi, fetch lại bình luận
+    }, [productId]);
+    
 
-    // Xử lý khi người dùng gửi bình luận
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
-    
+
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Vui lòng đăng nhập để bình luận.');
             navigate('/login');
             return;
         }
-    
+
         if (comment && rating) {
             const data = {
                 userId: localStorage.getItem('userId'),
@@ -49,14 +49,14 @@ function CommentSection({ productId }) {
                 comment,
                 rating,
             };
-    
+
             try {
                 const response = await axios.post('http://localhost:3003/rate/rate', data, {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
-    
+
                 if (response.status === 200 && response.data.rate) {
                     alert('Bình luận thành công!');
                     window.location.reload(); // Load lại trang sau khi bấm đóng alert
@@ -71,7 +71,7 @@ function CommentSection({ productId }) {
         } else {
             setErrorMessage("Vui lòng nhập bình luận và đánh giá sao.");
         }
-    };    
+    };
 
     // Xử lý đánh giá sao
     const handleRatingChange = (ratingValue) => {
@@ -88,7 +88,7 @@ function CommentSection({ productId }) {
                     "Content-Type": "application/json",
                 },
             });
-
+    
             if (response.status === 200) {
                 setComments((prevComments) => prevComments.filter((comment) => comment._id !== commentId));
                 setSuccessMessage("Đã xóa bình luận.");
@@ -99,7 +99,7 @@ function CommentSection({ productId }) {
             console.log("Error deleting comment:", error?.message);
             setErrorMessage("Có lỗi xảy ra khi xóa bình luận.");
         }
-    };
+    };    
 
     return (
         <div className="comment-section">
@@ -131,25 +131,24 @@ function CommentSection({ productId }) {
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             <div className="comment-list">
-                {comments.map((cmt) => (
-                    <div key={cmt._id} className="comment-item">
-                        <p><strong>{cmt.userId.username || 'Người dùng'}:</strong> {cmt.comment}</p>
+                {comments.map((user) => (
+                    <div key={user._id} className="comment-item">
+                        <p><strong>{user.userId ? user.userId.username : 'Người dùng'}:</strong> {user.comment}</p>
                         <div className="stars">
                             {[1, 2, 3, 4, 5].map((value) => (
                                 <FaStar
                                     key={value}
-                                    className={`star ${cmt.rating >= value ? 'filled' : ''}`}
+                                    className={`star ${user.rating >= value ? 'filled' : ''}`}
                                 />
                             ))}
                         </div>
-                        {cmt.userId._id === localStorage.getItem('userId') && (
-                            <button className="delete-comment-btn" onClick={() => handleDeleteComment(cmt._id)}>
+                        {user.userId && user.userId._id === localStorage.getItem('userId') && (
+                            <button className="delete-comment-btn" onClick={() => handleDeleteComment(user._id)}>
                                 Xóa
                             </button>
                         )}
                     </div>
                 ))}
-
             </div>
         </div>
     );
