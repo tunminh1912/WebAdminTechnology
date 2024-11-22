@@ -7,8 +7,6 @@ const router = express.Router();
 router.post('/rate', async (req, res) => {
   try {
     const { userId, productId, comment, rating } = req.body;
-
-    // Kiểm tra dữ liệu đầu vào
     if (!userId || !productId || !comment || !rating) {
       return res.status(400).json({ message: 'All fields are required' });
     }
@@ -20,16 +18,30 @@ router.post('/rate', async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: 'Product not found' });
     }
+    const rate = await Rate.findOne({ productId: product._id });
+    if (!rate) {
+      const newRate = new Rate({
+        productId: product._id,
+        users: [{
+          userId,
+          comment,
+          rating,
+        }],
+      });
 
-    const newRate = new Rate({
-      userId,
-      productId: product._id,
-      comment,
-      rating,
-    });
+      await newRate.save();
+      return res.status(200).json({ message: 'Comment and rating added successfully', rate: newRate });
+    } else {
+      rate.users.push({
+        userId,
+        comment,
+        rating,
+      });
 
-    await newRate.save();
-    res.status(200).json({ message: 'Comment and rating added successfully', rate: newRate });
+      await rate.save();
+      res.status(200).json({ message: 'Comment and rating added successfully', rate });
+    }
+
   } catch (err) {
     res.status(500).json({ message: 'Error adding comment', error: err.message });
   }
@@ -44,36 +56,42 @@ router.get('/rate/:productId', async (req, res) => {
       return res.status(400).json({ message: 'Product not found' });
     }
 
-    const rates = await Rate.find({ productId: product._id }).populate('userId', '_id username');
+    const rate = await Rate.findOne({ productId: product._id }).populate('users.userId', 'username'); 
 
-    if (rates.length === 0) {
+    if (!rate || rate.users.length === 0) {
       return res.status(200).json({ message: 'No comments found', rates: [] });
     }
-    res.status(200).json(rates);
+    
+    res.status(200).json({ ratings: rate.users });
   } catch (err) {
     res.status(500).json({ message: 'Error fetching comments', error: err.message });
   }
 });
 
-// DELETE: Xóa bình luận của chính người dùng
+
+// DELETE: Xóa bình luận của người dùng
 router.delete('/rate/:commentId', async (req, res) => {
   try {
     const { commentId } = req.params;
     const { userId } = req.body;
+
     if (!userId) {
       return res.status(401).json({ message: 'Unauthorized: Missing userId' });
     }
 
-    const comment = await Rate.findById(commentId);
-    if (!comment) {
+    const rate = await Rate.findOne({ 'users._id': commentId });
+    if (!rate) {
       return res.status(404).json({ message: 'Comment not found' });
     }
 
-    if (comment.userId.toString() !== userId) {
+    const commentIndex = rate.users.findIndex(userComment => userComment._id.toString() === commentId);
+
+    if (rate.users[commentIndex].userId.toString() !== userId) {
       return res.status(403).json({ message: 'Forbidden: You can only delete your own comments' });
     }
+    rate.users.splice(commentIndex, 1);
+    await rate.save();
 
-    await comment.deleteOne();
     res.status(200).json({ message: 'Comment deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: 'Error deleting comment', error: err.message });
