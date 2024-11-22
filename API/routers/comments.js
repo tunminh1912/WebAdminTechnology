@@ -59,15 +59,14 @@ router.get('/rate/:productId', async (req, res) => {
     const rate = await Rate.findOne({ productId: product._id }).populate('users.userId', 'username'); 
 
     if (!rate || rate.users.length === 0) {
-      return res.status(200).json({ message: 'No comments found', rates: [] });
+      return res.status(200).json({ message: 'No comments found', users: [] });
     }
     
-    res.status(200).json({ ratings: rate.users });
+    res.status(200).json({ users: rate.users });
   } catch (err) {
     res.status(500).json({ message: 'Error fetching comments', error: err.message });
   }
 });
-
 
 // DELETE: Xóa bình luận của người dùng
 router.delete('/rate/:commentId', async (req, res) => {
