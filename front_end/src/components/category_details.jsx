@@ -10,7 +10,7 @@ function Product() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const category_id = queryParams.get('category');  
+    const category_id = queryParams.get('category');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,43 +30,43 @@ function Product() {
     }, [category_id]);
 
     const handleAddToCart = async (productId) => {
-        if(isLoggedIn){
-            if(productId !== null){
+        if (isLoggedIn) {
+            if (productId !== null) {
                 const data = {
-                  userId: localStorage.getItem('userId', null),
-                  productId,
-                  quantity: document.getElementById("soluong").value,
+                    userId: localStorage.getItem('userId', null),
+                    productId,
+                    quantity: document.getElementById("soluong").value,
                 }
-          
-                  try {
-                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
-                      headers: {
-                        "Content-Type": "application/json",
+
+                try {
+                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
+                        headers: {
+                            "Content-Type": "application/json",
                         },
                     });
-                     if (response.status === 200){
-                       alert('Add to cart successfull')
-                       navigate('/cart')
-                     } 
-                   } catch (error) {
-                     console.log(error?.message);
-                  }
-              }
-        }else{
+                    if (response.status === 200) {
+                        alert('Add to cart successfull')
+                        navigate('/cart')
+                    }
+                } catch (error) {
+                    console.log(error?.message);
+                }
+            }
+        } else {
             alert("Login to add cart")
             navigate('/login')
         }
-      }
+    }
 
     return (
         <>
-            <Header /> 
+            <Header />
             <div className="product-grid">
-                {products.length > 0 && 
+                {products.length > 0 &&
                     products.map((product) => (
                         <div key={product.product_id} className="product-container" onClick={() => navigate(`/products/${product.product_id}`)}>
                             <img
-                                src={product.image_product} 
+                                src={product.image_product}
                                 alt={product.name_product}
                                 className="product-image"
                             />
@@ -74,7 +74,7 @@ function Product() {
                             <p className="product-price">
                                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                             </p>
-                         <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
+                            <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
                                 Add to Cart
                             </Grid>
                         </div>

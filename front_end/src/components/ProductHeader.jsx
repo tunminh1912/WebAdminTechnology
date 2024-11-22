@@ -6,7 +6,7 @@ function Header() {
   return (
     <div
       className="background-image"
-      style={{ backgroundImage: `url(${headphoneImage})` }} 
+      style={{ backgroundImage: `url(${headphoneImage})` }}
     >
       <div className="content">
         <h1 className="product-title">iPhone 16</h1>

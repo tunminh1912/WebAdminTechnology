@@ -20,26 +20,26 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-app.post('/add', upload.single('image_category'), async (req,res)=>{
-    const { category_id, name_category } = req.body
-    const image_category = req.file
-  
-    if (!image_category) {
-        return res.send('Vui lòng tải lên một hình ảnh.');
-    }
-      
-    const newCategory = new Category({
-        category_id,
-        name_category,
-        image_category: '/uploads/' + image_category.filename
-    });
+app.post('/add', upload.single('image_category'), async (req, res) => {
+  const { category_id, name_category } = req.body
+  const image_category = req.file
 
-    try {
-        await newCategory.save()
-        res.status(200).json(newCategory);
-    } catch (error) {
-        res.status(500).json(error)
-    }
+  if (!image_category) {
+    return res.send('Vui lòng tải lên một hình ảnh.');
+  }
+
+  const newCategory = new Category({
+    category_id,
+    name_category,
+    image_category: '/uploads/' + image_category.filename
+  });
+
+  try {
+    await newCategory.save()
+    res.status(200).json(newCategory);
+  } catch (error) {
+    res.status(500).json(error)
+  }
 })
 // Lấy danh mục theo category_id
 app.get('/:category_id', async (req, res) => {
@@ -65,7 +65,7 @@ app.put('/:category_id', upload.single('image_category'), async (req, res) => {
   };
 
   if (req.file) {
-    updatedCategory.image_category = '/uploads/' + req.file.filename; 
+    updatedCategory.image_category = '/uploads/' + req.file.filename;
   }
 
   try {

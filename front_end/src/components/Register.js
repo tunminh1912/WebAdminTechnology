@@ -11,7 +11,7 @@ const Register = () => {
   const handleRegister = async () => {
     try {
       await axios.post('http://localhost:3003/api/register', { username, email, password });
-      navigate('/login'); 
+      navigate('/login');
     } catch (error) {
       console.error('Registration failed:', error);
     }
@@ -86,40 +86,40 @@ const Register = () => {
           }
         `}
       </style>
-    <div className="lr-container">
-      <input
-        type="text"
-        placeholder="Username"
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleRegister}>Register</button>
+      <div className="lr-container">
+        <input
+          type="text"
+          placeholder="Username"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={handleRegister}>Register</button>
 
-      <div>
-      <p>
-      Bạn đã có tài khoản?{' '}
-      <span
-        onClick={navigateToLogin}
-        style={{
-          color: '#007BFF',
-          textDecoration: 'underline',
-          cursor: 'pointer',
-        }}
-      >
-        Hãy đăng nhập
-      </span>
-    </p>
+        <div>
+          <p>
+            Bạn đã có tài khoản?{' '}
+            <span
+              onClick={navigateToLogin}
+              style={{
+                color: '#007BFF',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+            >
+              Hãy đăng nhập
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

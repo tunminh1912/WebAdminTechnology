@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,28 +20,28 @@ const Products = () => {
   }, []);
 
   // Hàm xử lý xóa sản phẩm
-const handleDelete = async (productId) => {
-  try {
+  const handleDelete = async (productId) => {
+    try {
       console.log('Product ID:', productId); // Kiểm tra xem productId có đúng không
       const response = await axios.delete(`http://localhost:3003/products/${productId}`);
 
       if (response.status === 200) {
-          // Xóa sản phẩm khỏi mảng `products` sau khi đã xóa thành công
-          setProducts(products.filter(product => product.product_id !== productId));
-          alert('Sản phẩm đã được xóa thành công!');
+        // Xóa sản phẩm khỏi mảng `products` sau khi đã xóa thành công
+        setProducts(products.filter(product => product.product_id !== productId));
+        alert('Sản phẩm đã được xóa thành công!');
       } else {
-          // Nếu có vấn đề khác từ server
-          alert('Lỗi khi xóa sản phẩm!');
+        // Nếu có vấn đề khác từ server
+        alert('Lỗi khi xóa sản phẩm!');
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error deleting product:', error);
       alert('Lỗi khi xóa sản phẩm!');
-  }
-};
+    }
+  };
 
   return (
     <div>
-      <button onClick={()=>{navigate('/products/FormAddProduct')}}>Add</button> {/* Gọi hàm handleAddProduct */}
+      <button onClick={() => { navigate('/products/FormAddProduct') }}>Add</button> {/* Gọi hàm handleAddProduct */}
       <h2>Product Management</h2>
       <table>
         <thead>
@@ -74,7 +74,7 @@ const handleDelete = async (productId) => {
                 <img src={`${product.image_product}`} alt={product.name_product} style={{ width: '100px' }} />
               </td>
               <td>
-              <button onClick={() => navigate(`/reviseProduct/${product.product_id}`)}>Revise</button>
+                <button onClick={() => navigate(`/reviseProduct/${product.product_id}`)}>Revise</button>
               </td>
               <td>
                 <button onClick={() => handleDelete(product.product_id)}>Delete</button>
