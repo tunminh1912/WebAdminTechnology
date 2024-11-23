@@ -10,7 +10,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads'))
 // Cấu hình multer để lưu file vào thư mục public/uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../public/uploads')); // Lưu vào thư mục public/uploads
+    cb(null, path.join(__dirname, '../../Admin/public/uploads')); // Lưu vào thư mục public/uploads
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}_${file.originalname}`); // Đặt tên file với timestamp

@@ -7,7 +7,7 @@ const FormAddProduct = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target); // Tạo FormData từ form
-
+    console.log(formData)
     try {
       const response = await axios.post('http://localhost:3003/products/FormAddProduct/alert', formData, {
         headers: {
@@ -26,8 +26,6 @@ const FormAddProduct = () => {
     <div>
       <h1>Thêm sản phẩm mới</h1>
       <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
-        <label htmlFor="product_id">Mã sản phẩm:</label>
-        <input type="number" id="product_id" name="product_id" required /><br /><br />
 
         <label htmlFor="category_id">Mã kho:</label>
         <input type="number" id="category_id" name="category_id" required /><br /><br />

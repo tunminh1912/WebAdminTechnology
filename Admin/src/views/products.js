@@ -46,7 +46,6 @@ const Products = () => {
       <table>
         <thead>
           <tr>
-            <th>Product ID</th>
             <th>Category ID</th>
             <th>Name product</th>
             <th>Price</th>
@@ -59,8 +58,7 @@ const Products = () => {
         </thead>
         <tbody>
           {products.map((product) => (
-            <tr key={product.product_id}>
-              <td>{product.product_id}</td>
+            <tr key={product._id}>
               <td>{product.category_id}</td>
               <td>{product.name_product}</td>
               <td>
@@ -74,10 +72,10 @@ const Products = () => {
                 <img src={`${product.image_product}`} alt={product.name_product} style={{ width: '100px' }} />
               </td>
               <td>
-                <button onClick={() => navigate(`/reviseProduct/${product.product_id}`)}>Revise</button>
+                <button onClick={() => navigate(`/reviseProduct/${product._id}`)}>Revise</button>
               </td>
               <td>
-                <button onClick={() => handleDelete(product.product_id)}>Delete</button>
+                <button onClick={() => handleDelete(product._id)}>Delete</button>
               </td>
             </tr>
           ))}

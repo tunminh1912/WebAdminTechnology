@@ -66,12 +66,9 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
-// PUT: Cập nhật thông tin sản phẩm
-app.put('/products/:id', upload.array('image_product',5), async (req, res) => {
+app.put('/products/:id', upload.array('image_product', 5), async (req, res) => {
   try {
-    const productId = req.params.id;
     const updatedProduct = {
-      product_id: req.body.product_id,
       category_id: req.body.category_id,
       name_product: req.body.name_product,
       description: req.body.description,
@@ -79,12 +76,12 @@ app.put('/products/:id', upload.array('image_product',5), async (req, res) => {
       quantity: Number(req.body.quantity),
     };
 
-    if (req.file) {
-      updatedProduct.image_product = `/uploads/${req.file.filename}`;
+    if (req.files && req.files.length > 0) {
+      updatedProduct.image_product = req.files.map((file) => `/uploads/${file.filename}`);
     }
 
     const result = await Product.updateOne(
-      { product_id: productId },
+      { _id: req.params.id }, 
       { $set: updatedProduct }
     );
 
@@ -98,21 +95,25 @@ app.put('/products/:id', upload.array('image_product',5), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 // API để xóa sản phẩm theo product_id
 app.delete('/products/:productId', async (req, res) => {
-  const { productId } = req.params;  // Lấy productId từ URL
-  
+  const { productId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    return res.status(400).json({ message: 'Invalid product ID' });
+  }
+
   try {
-    // Sử dụng mô hình Product để tìm và xóa sản phẩm
-    const result = await Product.findOneAndDelete({ product_id: productId });
+    const result = await Product.findOneAndDelete({ _id: productId });
 
     if (!result) {
       return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
     }
-    
+
     res.status(200).json({ message: 'Sản phẩm đã được xóa thành công' });
   } catch (error) {
-    console.error('Lỗi khi xóa sản phẩm:', error);
+    console.error('Error deleting product:', error);
     res.status(500).json({ message: 'Lỗi khi xóa sản phẩm', error });
   }
 });
