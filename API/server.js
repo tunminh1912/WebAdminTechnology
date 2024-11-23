@@ -37,6 +37,7 @@ app.use('/searchs',Search)
 app.use('/vnpay', vnpay_router)
 app.use('/rate', commentRoutes);
 
+
 // GET: Lấy tất cả sản phẩm
 app.get('/products', async (req, res) => {
   try {

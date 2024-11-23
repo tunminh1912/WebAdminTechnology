@@ -36,6 +36,7 @@ const Profile = () => {
   }, [navigate]);
 
   const handleLogout = () => {
+    localStorage.removeItem('userId');
     localStorage.removeItem('token');
     navigate('/');
   };

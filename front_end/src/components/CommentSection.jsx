@@ -7,30 +7,40 @@ import './Category.css';
 function CommentSection({ productId }) {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
-    const [rating, setRating] = useState(0); 
+    const [rating, setRating] = useState(0);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [totalComments, setTotalComments] = useState(0); // State cho tổng số bình luận
+    const [averageRating, setAverageRating] = useState(0); // State cho đánh giá trung bình
     const navigate = useNavigate();
 
-    // Lấy danh sách bình luận từ server
+    // Lấy danh sách bình luận và dữ liệu bổ sung từ server
     useEffect(() => {
-        async function fetchComments() {
-            try {
-                const response = await axios.get(`http://localhost:3003/rate/rate/${productId}`, {
-                    headers: { "Content-Type": "application/json" },
-                });
+    async function fetchComments() {
+        try {
+            const response = await axios.get(`http://localhost:3003/rate/rate/${productId}`, {
+                headers: { "Content-Type": "application/json" },
+            });
 
-                console.log(response.data);  
-                if (response.data && Array.isArray(response.data.users)) {
-                    setComments(response.data.users); // Use 'users' here
+            console.log(response.data); // Kiểm tra dữ liệu trả về từ API
+
+            if (response.data) {
+                if (Array.isArray(response.data.users)) {
+                    setComments(response.data.users); // Lấy danh sách bình luận
                 }
-            } catch (error) {
-                console.log("Error fetching comments:", error?.message);
+                setTotalComments(response.data.totalComments || 0); // Lấy tổng số bình luận
+
+                // Chuyển đổi averageRating về kiểu number
+                const avgRating = parseFloat(response.data.averageRating) || 0;
+                setAverageRating(avgRating); // Lưu giá trị trung bình đánh giá vào state
             }
+        } catch (error) {
+            console.log("Error fetching comments:", error?.message);
         }
-        fetchComments();
-    }, [productId]);
-    
+    }
+    fetchComments();
+}, [productId]);
+
 
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
@@ -80,30 +90,37 @@ function CommentSection({ productId }) {
 
     // Xử lý việc xóa bình luận
     const handleDeleteComment = async (commentId) => {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId');  // Lấy userId từ localStorage
         try {
-            const response = await axios.delete(`http://localhost:3003/rate/rate/${commentId}`, {
-                data: { userId },
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-    
-            if (response.status === 200) {
-                setComments((prevComments) => prevComments.filter((comment) => comment._id !== commentId));
-                setSuccessMessage("Đã xóa bình luận.");
-            } else {
-                setErrorMessage("Không thể xóa bình luận.");
-            }
+          const response = await axios.delete(`http://localhost:3003/rate/rate/${commentId}`, {
+            data: { userId },  // Gửi userId trong body request
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+      
+          if (response.status === 200) {
+            setComments((prevComments) => prevComments.filter((comment) => comment._id !== commentId));
+            setSuccessMessage("Đã xóa bình luận.");
+          } else {
+            setErrorMessage("Không thể xóa bình luận.");
+          }
         } catch (error) {
-            console.log("Error deleting comment:", error?.message);
-            setErrorMessage("Có lỗi xảy ra khi xóa bình luận.");
+          console.log("Error deleting comment:", error?.message);
+          setErrorMessage("Có lỗi xảy ra khi xóa bình luận.");
         }
-    };    
+      };
+      
 
     return (
         <div className="comment-section">
             <p style={{ fontWeight: 'bold', fontSize: '23px' }}>ĐÁNH GIÁ SẢN PHẨM</p>
+
+            <div className="comment-summary">
+                <p><strong>Tổng số bình luận:</strong> {totalComments > 0 ? totalComments : 'Chưa có bình luận'}</p>
+                <p><strong>Đánh giá trung bình:</strong> {isNaN(averageRating) || averageRating === 0 ? 'Chưa có đánh giá' : averageRating.toFixed(1)} / 5</p>
+            </div>
+
             <form onSubmit={handleCommentSubmit}>
                 <textarea
                     value={comment}
@@ -138,7 +155,7 @@ function CommentSection({ productId }) {
                             {[1, 2, 3, 4, 5].map((value) => (
                                 <FaStar
                                     key={value}
-                                    className={`star ${user.rating >= value ? 'filled' : ''}`}
+                                    className={`star ${user.rate >= value ? 'filled' : ''}`}
                                 />
                             ))}
                         </div>
