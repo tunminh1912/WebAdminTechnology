@@ -134,7 +134,7 @@ const CategoryComponent = () => {
         <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Sản Phẩm</h2>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
           {products.map((product) => (
-            <Grid key={product.product_id} onClick={() => navigate(`/products/${product.product_id}`)} style={{ cursor: 'pointer' }}>
+            <Grid key={product._id} onClick={() => navigate(`/products/${product._id}`)} style={{ cursor: 'pointer' }}>
               <div key={product.product_id} className="product-container">
                 <img
                   src={product.image_product}

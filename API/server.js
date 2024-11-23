@@ -53,7 +53,7 @@ app.get('/products', async (req, res) => {
 app.get('/products/:id', async (req, res) => {
   try {
     const productId = req.params.id;
-    const product = await Product.findOne({ product_id: productId });
+    const product = await Product.findOne({_id: productId });
     
     if (product) {
       res.status(200).json(product);
