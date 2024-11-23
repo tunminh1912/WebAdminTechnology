@@ -118,7 +118,14 @@ function CommentSection({ productId }) {
 
             <div className="comment-summary">
                 <p><strong>Tổng số bình luận:</strong> {totalComments > 0 ? totalComments : 'Chưa có bình luận'}</p>
-                <p><strong>Đánh giá trung bình:</strong> {isNaN(averageRating) || averageRating === 0 ? 'Chưa có đánh giá' : averageRating.toFixed(1)} / 5</p>
+                <p><strong>Đánh giá:  </strong>
+                    {isNaN(averageRating) || averageRating === 0 ? 'Chưa có đánh giá' : (
+                        <>
+                            {averageRating.toFixed(1)}  / 5
+                            <FaStar className="star-icon" style={{ color: '#FFD700', marginLeft: '5px' }} />
+                        </>
+                    )}
+                </p>
             </div>
 
             <form onSubmit={handleCommentSubmit}>
