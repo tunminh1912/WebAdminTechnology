@@ -64,7 +64,7 @@ function Product() {
             <div className="product-grid">
                 {products.length > 0 &&
                     products.map((product) => (
-                        <div key={product.product_id} className="product-container" onClick={() => navigate(`/products/${product.product_id}`)}>
+                        <div key={product._id} className="product-container" onClick={() => navigate(`/products/${product._id}`)}>
                             <img
                                 src={product.image_product}
                                 alt={product.name_product}
