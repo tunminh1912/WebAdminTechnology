@@ -31,36 +31,32 @@ function Productdetails() {
 
     const handleAddToCart = async (productId) => {
         if (isLoggedIn) {
-            const selectedQuantity = Number(document.getElementById("soluong").value);
-            
-            if (selectedQuantity > product.quantity) {
-                alert("Số lượng đã đạt giới hạn");
-                return; // Exit the function if the selected quantity exceeds the available stock
+          if (productId !== null) {
+            const data = {
+              userId: localStorage.getItem('userId', null),
+              productId,
+              quantity: 1,
             }
     
-            if (productId !== null) {
-                const data = {
-                    userId: localStorage.getItem('userId', null),
-                    productId,
-                    quantity: selectedQuantity,
-                };
-    
-                try {
-                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
-                    if (response.status === 200) {
-                        alert('Thêm vào giỏ hàng thành công');
-                        navigate('/cart');
-                    }
-                } catch (error) {
-                    console.log(error?.message);
-                }
+            console.log(data)
+            try {
+              const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+              if (response.status === 200) {
+                alert('Add to cart successfull')
+              }
+            } catch (error) {
+              console.log(error?.message);
             }
+          }
+        } else {
+          alert("Login to add cart")
+          navigate('/login')
         }
-    };
+      };
     
     return (
         <>
