@@ -52,14 +52,28 @@ const SearchResultsPage = () => {
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
           {results.length > 0 ? (
             results.map((product) => (
-              <div key={product._id} className="product-container" style={{ width: '250px', textAlign: 'center' }}>
+              <div key={product._id} className="product-container" onClick={() => navigate(`/products/${product._id}`)}>
                 <img
                   src={product.image_product}
                   alt={product.name_product}
                   className="product-image"
-                  style={{ width: '100%', height: 'auto' }}
                 />
                 <p className="product-name">{product.name_product}</p>
+                                            <div className="product-ratings">
+                  <p className="average-rating">
+                    {product.averageRating && product.averageRating > 0 ? (
+                      <>
+                        Đánh giá: {product.averageRating.toFixed(1)}
+                        <span style={{ color: '#FFD700', marginLeft: '5px' }}>★</span>
+                      </>
+                    ) : (
+                      'Chưa có đánh giá'
+                    )}
+                  </p>
+                  <p className="total-comments">
+                    Bình luận: {product.totalComments || 0}
+                  </p>
+                </div>
                 <p className="product-price">
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                 </p>
