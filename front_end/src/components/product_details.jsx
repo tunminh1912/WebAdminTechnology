@@ -66,58 +66,55 @@ function Productdetails() {
     return (
         <>
             <Header />
-            <div className="productDetailWrapper">
-                {product && (
-                    <>
-                        <div className="productDetailContent">
-                            <div className="productImageWrapper">
+            <div className="product-grid">
+                {products.length > 0 &&
+                    products.map((product) => ( // Bỏ ngoặc {} bao quanh map()
+                        <Grid
+                            key={product._id}
+                            onClick={() => navigate(`/products/${product._id}`)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <div className="product-container">
                                 <img
                                     src={product.image_product}
                                     alt={product.name_product}
-                                    className="productImage"
+                                    className="product-image"
                                 />
-                            </div>
+                                <p className="product-name">{product.name_product}</p>
 
-                            <div className="productInfoWrapper">
-                                <h1 className="productTitle">{product.name_product}</h1>
-                                <p className="productCost">
+                                <div className="product-ratings">
+                                    <p className="average-rating">
+                                        {product.averageRating && product.averageRating > 0 ? (
+                                            <>
+                                                Đánh giá: {product.averageRating.toFixed(1)}
+                                                <span style={{ color: '#FFD700', marginLeft: '5px' }}>★</span>
+                                            </>
+                                        ) : (
+                                            'Chưa có đánh giá'
+                                        )}
+                                    </p>
+                                    <p className="total-comments">
+                                        Bình luận: {product.totalComments || 0}
+                                    </p>
+                                </div>
+
+                                <p className="product-price">
                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                                 </p>
-                                <p className="shipping">
-                                    <label>Vận Chuyển:   Miễn phí vận chuyển  </label>
-                                </p>
-                                <p className="productQuantity">
-                                    <label>Số sản phẩm còn lại: </label>
-                                    {product.quantity}
-                                </p>
 
-                                <div className="optionRow">
-                                    <label>Số lượng:</label>
-                                    <input type="number" name="quantity" id="soluong" min="1" defaultValue="1" />
-                                </div>
-
-                                <div className="productActionButtons">
-                                    <button onClick={() => handleAddToCart(product?._id)} className="addToCartButton">
-                                        Thêm Vào Giỏ Hàng
-                                    </button>
-                                    <button className="buyNowButton">Mua Ngay</button>
-                                </div>
+                                <Grid
+                                    className="add-to-cart-btn"
+                                    onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}
+                                >
+                                    Add to Cart
+                                </Grid>
                             </div>
-                        </div>
-
-
-                        <div className="productDescriptionWrapper">
-                            <h2>Mô Tả Sản Phẩm</h2>
-                            <p className="productDescription">{product.description}</p>
-                        </div>
-                    </>
-                )}
+                        </Grid>
+                    ))
+                }
             </div>
-
-            <CommentSection productId={id} />
-
         </>
-
     );
 }
+
 export default Productdetails;
