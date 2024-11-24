@@ -11,6 +11,7 @@ import Users from './views/UsersList';
 import Category from './views/category';
 import FormAddCategory from './views/FormAddCategory';
 import ReviseCategory from './views/reviseCategory';
+import OrdersList from './views/OrdersList';
 
 const MainContainer = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ function App() {
             <Route path="/categories" element={<Category />} />
             <Route path="/reviseCategory/:categoryId" element={<ReviseCategory />} />
             <Route path="/categories/FormAddCategory" element={<FormAddCategory />} />
+            <Route path="/orders" element={<OrdersList />} />
           </Routes>
         </Content>
       </MainContainer>
