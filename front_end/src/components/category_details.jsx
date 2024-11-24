@@ -1,114 +1,142 @@
 import axios from 'axios';
-import './Category.css'; // Updated CSS file with new class names
+import './Category.css';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
-import Grid from '@mui/material/Grid';
+import CommentSection from './CommentSection';
+import { FaStar } from 'react-icons/fa';
 
-function Product() {
-    const [products, setProducts] = useState([]);
+
+function Productdetails() {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const category_id = queryParams.get('category');
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchProducts() {
+        async function fetchProduct() {
             try {
-                const response = await axios.get(`http://localhost:3003/products/category/${category_id}`);
-                if (response.status === 200) {
-                    setProducts(response.data);
-                }
+                const response = await axios.get(`http://localhost:3003/products/${id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.status === 200) setProduct(response.data);
             } catch (error) {
-                console.log('Error fetching products:', error.message);
+                console.log(error?.message);
             }
         }
-        if (category_id) fetchProducts();
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
-    }, [category_id]);
-
+        fetchProduct();
+    }, [id]);
+    
     const handleAddToCart = async (productId) => {
         if (isLoggedIn) {
-          if (productId !== null) {
-            const data = {
-              userId: localStorage.getItem('userId', null),
-              productId,
-              quantity: 1,
+            if (productId !== null) {
+                const inputQuantity = parseInt(document.getElementById("soluong").value, 10);
+                if (inputQuantity > product.quantity) {
+                    alert("Vượt quá số lượng trong kho");
+                    return;
+                }
+
+                const data = {
+                    userId: localStorage.getItem('userId', null),
+                    productId,
+                    quantity: inputQuantity,
+                };
+
+                console.log(data);
+                try {
+                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    if (response.status === 200) {
+                        alert('Thêm vào giỏ hàng thành công');
+                    }
+                } catch (error) {
+                    console.log(error?.message);
+                }
             }
-    
-            console.log(data)
-            try {
-              const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              if (response.status === 200) {
-                alert('Add to cart successfull')
-              }
-            } catch (error) {
-              console.log(error?.message);
-            }
-          }
         } else {
-          alert("Login to add cart")
-          navigate('/login')
+            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            navigate('/login');
         }
-      }
+    };
+
 
     return (
-    <>
-      <Header />
-      <div className="product-grid">
-        {products.length > 0 &&
-          products.map((product) => ( 
-            <Grid
-              key={product._id}
-              onClick={() => navigate(`/products/${product._id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="product-container">
-                <img
-                  src={product.image_product}
-                  alt={product.name_product}
-                  className="product-image"
-                />
-                <p className="product-name">{product.name_product}</p>
+        <>
+            <Header />
+            <div className="productDetailWrapper">
+                {product && (
+                    <>
+                        <div className="productDetailContent">
+                            <div className="productImageWrapper">
+                                <img
+                                    src={product.image_product}
+                                    alt={product.name_product}
+                                    className="productImage"
+                                />
+                            </div>
 
-                <div className="product-ratings">
-                  <p className="average-rating">
-                    {product.averageRating && product.averageRating > 0 ? (
-                      <>
-                        Đánh giá: {product.averageRating.toFixed(1)}
-                        <span style={{ color: '#FFD700', marginLeft: '5px' }}>★</span>
-                      </>
-                    ) : (
-                      'Chưa có đánh giá'
-                    )}
-                  </p>
-                  <p className="total-comments">
-                    Bình luận: {product.totalComments || 0}
-                  </p>
-                </div>
+                            <div className="productInfoWrapper">
+                                <h1 className="productTitle">{product.name_product}</h1>
+                                <div className="productRatings">
+                                    <p className="averageRating">
+                                        {product.averageRating && product.averageRating > 0 ? (
+                                            <>
+                                                Đánh giá trung bình: {product.averageRating.toFixed(1)} / 5
+                                                <FaStar style={{ color: '#FFD700', marginLeft: '5px' }} />
+                                            </>
+                                        ) : (
+                                            'Chưa có đánh giá'
+                                        )}
+                                    </p>
+                                    <p className="totalComments">
+                                        Tổng số bình luận: {product.totalComments || 0}
+                                    </p>
+                                </div>
 
-                <p className="product-price">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                </p>
+                                <p className="productCost">
+                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                                </p>
+                                <p className="shipping">
+                                    <label>Vận Chuyển:   Miễn phí vận chuyển  </label>
+                                </p>
+                                <p className="productQuantity">
+                                    <label>Số sản phẩm còn lại: </label>
+                                    {product.quantity}
+                                </p>
 
-                <Grid
-                  className="add-to-cart-btn"
-                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}
-                >
-                  Add to Cart
-                </Grid>
-              </div>
-            </Grid>
-          ))
-        }
-      </div>
-    </>
-  );
+                                <div className="optionRow">
+                                    <label>Số lượng:</label>
+                                    <input type="number" name="quantity" id="soluong" min="1" defaultValue="1" />
+                                </div>
+
+                                <div className="productActionButtons">
+                                    <button onClick={() => handleAddToCart(product?._id)} className="addToCartButton">
+                                        Thêm Vào Giỏ Hàng
+                                    </button>
+                                    <button className="buyNowButton">Mua Ngay</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="productDescriptionWrapper">
+                            <h2>Mô Tả Sản Phẩm</h2>
+                            <p className="productDescription">{product.description}</p>
+                        </div>
+                    </>
+                )}
+            </div>
+
+            <CommentSection productId={id} />
+
+        </>
+
+    );
 }
-export default Product;
+export default Productdetails;
