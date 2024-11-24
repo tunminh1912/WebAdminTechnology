@@ -110,7 +110,7 @@ const CategoryComponent = () => {
     }
   }
 
-  return (
+return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
       <CategoryTitle />
       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', padding: '20px 0' }}>
@@ -134,7 +134,11 @@ const CategoryComponent = () => {
         <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Sản Phẩm</h2>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
           {products.map((product) => (
-            <Grid key={product._id} onClick={() => navigate(`/products/${product._id}`)} style={{ cursor: 'pointer' }}>
+            <Grid
+              key={product._id}
+              onClick={() => navigate(`/products/${product._id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <div key={product.product_id} className="product-container">
                 <img
                   src={product.image_product}
@@ -142,17 +146,40 @@ const CategoryComponent = () => {
                   className="product-image"
                 />
                 <p className="product-name">{product.name_product}</p>
+
+                <div className="product-ratings">
+                  <p className="average-rating">
+                    {product.averageRating && product.averageRating > 0 ? (
+                      <>
+                        Đánh giá: {product.averageRating.toFixed(1)}
+                        <span style={{ color: '#FFD700', marginLeft: '5px' }}>★</span>
+                      </>
+                    ) : (
+                      'Chưa có đánh giá'
+                    )}
+                  </p>
+                  <p className="total-comments">
+                    Bình luận: {product.totalComments || 0}
+                  </p>
+                </div>
+
                 <p className="product-price">
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                 </p>
-                <Grid2 className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id) }}>Add to Cart</Grid2>
+
+                <Grid2
+                  className="add-to-cart-btn"
+                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id) }}
+                >
+                  Add to Cart
+                </Grid2>
               </div>
             </Grid>
           ))}
+
         </div>
       </div>
     </div>
   );
 };
-
 export default CategoryComponent;

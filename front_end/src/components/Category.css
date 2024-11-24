@@ -32,8 +32,8 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 260px; /* Fixed width for the product container */
-  height: 400px; /* Fixed height for the product container */
+  width: 260px; 
+  height: 400px; 
   margin: 20px;
   transition: transform 0.3s ease;
   display: flex;
@@ -42,16 +42,17 @@
 }
 
 .product-image {
-  width: 100%; /* Ensure the image takes the full width of the container */
-  height: 150px; /* Fixed height for the image */
-  object-fit: contain; /* Ensures the image is contained within the space without stretching */
-  margin: 10px 0; /* Adds space around the image */
-  border-bottom: 1px solid #e1e1e1; /* Optional border for separation */
+  width: 100%; 
+  height: 150px; 
+  object-fit: contain;
+  margin: 10px 0; 
+  border-bottom: 1px solid #e1e1e1; 
 }
 
 .product-name {
   margin-top: 10px;
   font-size: 14px;
+  font-weight: bold;
   text-align: left;
   padding-left: 10px;
 }
@@ -69,75 +70,76 @@
   padding: 8px 12px;
   font-size: 14px;
   font-weight: 500;
-  color: #ffffff; /* Màu chữ mặc định */
-  background-color: #B6E8A6; /* Màu nền mặc định */
+  color: #ffffff; 
+  background-color: #B6E8A6; 
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng mượt */
+  transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
-/* Thêm hiệu ứng khi rê chuột */
+
 .add-to-cart-btn:hover {
-  background-color: #4CAF50; /* Màu nền mới khi hover */
-  color: #ffffff; /* Màu chữ mới khi hover */
+  background-color: #4CAF50; 
+  color: #ffffff; 
 }
 
-/* Thêm hiệu ứng khi nhấn giữ */
+
 .add-to-cart-btn:active {
-  background-color: #3e8e41; /* Màu nền khi nhấn giữ */
-  transform: scale(0.95); /* Hiệu ứng thu nhỏ nhẹ */
+  background-color: #3e8e41; 
+  transform: scale(0.95); 
 }
 
 .product-container:hover {
   transform: translateY(-5px);
 }
 
+
 /* Wrapper chính cho toàn bộ nội dung */
 .productDetailWrapper {
   display: flex;
-  flex-direction: column; /* Xếp các phần tử con theo chiều dọc */
+  flex-direction: column; 
   align-items: center;
   padding: 20px;
   background-color: #f8f8f8;
-  gap: 20px; /* Khoảng cách giữa các khung */
+  gap: 20px; 
 }
 
 /* Khung thông tin sản phẩm */
 .productDetailContent {
   display: flex;
-  flex-direction: row; /* Sắp xếp hình ảnh và thông tin sản phẩm theo chiều ngang */
+  flex-direction: row; 
   max-width: 1200px;
   width: 100%;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  gap: 20px; /* Khoảng cách giữa khung hình ảnh và khung thông tin */
+  gap: 20px; 
 }
 
 /* Khung hình ảnh sản phẩm */
 .productImageWrapper {
-  flex: 1; /* Chiếm 1 phần không gian */
+  flex: 1; 
   padding: 20px;
 }
 
 .productImage {
   max-width: 100%;
-  border-radius: 10px; /* Bo tròn các góc */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng cho hình ảnh */
+  border-radius: 10px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
-/* Khung thông tin chi tiết sản phẩm */
+
 .productInfoWrapper {
-  flex: 2; /* Chiếm 2 phần không gian */
+  flex: 2; 
   padding: 20px;
 }
 
 .productTitle {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   color: #333;
 }
 
@@ -145,7 +147,33 @@
   font-size: 20px;
   color: #e40004;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+
+.product-ratings {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+  padding-left: 10px; 
+}
+
+.average-rating {
+  font-weight: bold;
+  align-items: flex-start; 
+}
+
+.total-comments {
+  font-style: italic;
+  color: #777;
+  margin-top: 4px; 
+}
+
+.product-ratings span {
+  color: #FFD700; 
+  margin-left: 3px; 
 }
 
 .productDescription {
@@ -155,7 +183,6 @@
   color: #555;
 }
 
-/* Thuộc tính sản phẩm */
 .productOptions {
   margin-bottom: 20px;
 }
@@ -190,6 +217,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  margin-bottom: 30px;
 }
 
 .addToCartButton,
