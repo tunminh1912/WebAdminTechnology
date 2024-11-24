@@ -35,7 +35,7 @@ function Productdetails() {
             const data = {
               userId: localStorage.getItem('userId', null),
               productId,
-              quantity: 1,
+              quantity: Number(document.getElementById("soluong").value),
             }
     
             console.log(data)
