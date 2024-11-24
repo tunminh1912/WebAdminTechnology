@@ -109,7 +109,7 @@ const Header = () => {
       </div>
 
       <div className="header-center">
-        <SearchField /> 
+        <SearchField />
       </div>
 
       <div className="header-right">

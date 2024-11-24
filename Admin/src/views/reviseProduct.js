@@ -7,7 +7,6 @@ const ReviseProducts = () => {
   const { productId } = useParams(); // Lấy productId từ URL
   const navigate = useNavigate();
   const [product, setProduct] = useState({
-    product_id: '',
     category_id: '',
     name_product: '',
     description: '',
@@ -75,16 +74,6 @@ const ReviseProducts = () => {
       <form onSubmit={handleSubmit}>
         <h1>Chỉnh sửa sản phẩm</h1>
 
-        <label htmlFor="product_id">Mã sản phẩm:</label>
-        <input
-          type="number"
-          id="product_id"
-          name="product_id"
-          value={product.product_id}
-          onChange={handleChange}
-          required
-        /><br /><br />
-
         <label htmlFor="category_id">Mã danh mục:</label>
         <input
           type="number"
@@ -139,10 +128,10 @@ const ReviseProducts = () => {
           {product.image_product && typeof product.image_product === 'string' && (
             <div>
               <br />
-              <img 
-                src={product.image_product} 
-                alt="Product" 
-                style={{ width: '200px', height: 'auto', display: 'block', marginBottom: '10px' }} 
+              <img
+                src={product.image_product}
+                alt="Product"
+                style={{ width: '200px', height: 'auto', display: 'block', marginBottom: '10px' }}
               />
             </div>
           )}
@@ -151,11 +140,11 @@ const ReviseProducts = () => {
             id="image_product"
             name="image_product"
             accept="image/*"
-            onChange={handleFileChange} 
+            onChange={handleFileChange}
           />
         </label>
         <br /><br />
-        
+
         <button type="submit">Lưu sản phẩm</button>
       </form>
     </div>

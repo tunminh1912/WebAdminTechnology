@@ -6,7 +6,7 @@ import Header from "./Navbar";
 import CommentSection from './CommentSection';
 
 function Productdetails() {
-    const { id } = useParams();  
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
@@ -29,13 +29,19 @@ function Productdetails() {
         fetchProduct();
     }, [id]);
 
-    const handleAddToCart = async (productId) => {
-        if(isLoggedIn){
-            if(productId !== null){
+        const handleAddToCart = async (productId) => {
+        if (isLoggedIn) {
+            if (productId !== null) {
+                const inputQuantity = parseInt(document.getElementById("soluong").value, 10);
+                if (inputQuantity > product.quantity) {
+                    alert("Vượt quá số lượng trong kho");
+                    return;
+                }
+    
                 const data = {
                   userId: localStorage.getItem('userId', null),
                   productId,
-                  quantity: Number(document.getElementById("soluong").value,)
+                  quantity: inputQuantity
                 }
                 console.log(data)
                   try {
@@ -44,55 +50,74 @@ function Productdetails() {
                         "Content-Type": "application/json",
                         },
                     });
-                     if (response.status === 200){
-                       alert('Add to cart successfull');
-                       navigate('/cart');
-                     } 
-                   } catch (error) {
-                     console.log(error?.message);
-                  }
-              }
+                    if (response.status === 200) {
+                        alert('Thêm vào giỏ hàng thành công');
+                    }
+                } catch (error) {
+                    console.log(error?.message);
+                }
+            }
+        } else {
+            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            navigate('/login');
         }
-      }
+    };
     
- return (
+    return (
         <>
-            <Header /> 
+            <Header />
             <div className="productDetailWrapper">
-    {product && (
-        <div className="productDetailContent">
-            <div className="productImageWrapper">
-                <img
-                    src={product.image_product}
-                    alt={product.name_product}
-                    className="productImage"
-                />
+                {product && (
+                    <>
+                        <div className="productDetailContent">
+                            <div className="productImageWrapper">
+                                <img
+                                    src={product.image_product}
+                                    alt={product.name_product}
+                                    className="productImage"
+                                />
+                            </div>
+
+                            <div className="productInfoWrapper">
+                                <h1 className="productTitle">{product.name_product}</h1>
+                                <p className="productCost">
+                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                                </p>
+                                <p className="shipping">
+                                    <label>Vận Chuyển:   Miễn phí vận chuyển  </label>
+                                </p>
+                                <p className="productQuantity">
+                                    <label>Số sản phẩm còn lại: </label>
+                                    {product.quantity}
+                                </p>
+
+                                <div className="optionRow">
+                                    <label>Số lượng:</label>
+                                    <input type="number" name="quantity" id="soluong" min="1" defaultValue="1" />
+                                </div>
+
+                                <div className="productActionButtons">
+                                    <button onClick={() => handleAddToCart(product?._id)} className="addToCartButton">
+                                        Thêm Vào Giỏ Hàng
+                                    </button>
+                                    <button className="buyNowButton">Mua Ngay</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="productDescriptionWrapper">
+                            <h2>Mô Tả Sản Phẩm</h2>
+                            <p className="productDescription">{product.description}</p>
+                        </div>
+                    </>
+                )}
             </div>
 
-            <div className="productInfoWrapper">
-                <h1 className="productTitle">{product.name_product}</h1>
-                <p className="productCost">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                </p>
-                <p className="productDescription">{product.description}</p>
-                
-                    <div className="optionRow">
-                        <label>Số lượng:</label>
-                        <input type="number" name="quantity" id="soluong" min="1" defaultValue="1" />
-                    </div>
-            
-                <div className="productActionButtons">
-                    <button onClick={() => handleAddToCart(product?._id)} className="addToCartButton">
-                        Thêm Vào Giỏ Hàng
-                    </button>
-                    <button className="buyNowButton">Mua Ngay</button>
-                </div>
-            </div>
-        </div>
-    )}
-</div>
             <CommentSection productId={id} />
+
         </>
-    ); 
+
+    );
 }
 export default Productdetails;

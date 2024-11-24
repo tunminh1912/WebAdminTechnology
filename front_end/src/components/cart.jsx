@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Navbar";
-import './Cart.css'; // Import file CSS
+import './Cart.css';
 
 function Cart() {
   const [cartProducts, setCartProducts] = useState([]);
   const userId = localStorage.getItem('userId', null)
 
-  useEffect(() => {    
+  useEffect(() => {
     async function fetchCart() {
       try {
         const response = await axios.get(
@@ -27,7 +27,7 @@ function Cart() {
     const isSelected = selectedProducts.some(
       (item) => item.productId._id === product.productId._id
     );
-    
+
     if (isSelected) {
       const nextProductList = selectedProducts.filter(
         (productItem) => productItem.productId._id !== product.productId._id
@@ -45,7 +45,7 @@ function Cart() {
     );
   }
 
-  async function handlePayment () {
+  async function handlePayment() {
     if (selectedProducts.length > 0) {
       // Điều hướng người dùng đến trang thanh toán, có thể truyền dữ liệu sản phẩm
       try {
@@ -58,9 +58,9 @@ function Cart() {
           language: "vn"
         }
         console.log(newPayment)
-        const response = await axios.post('http://localhost:3003/vnpay/create_payment_url',newPayment)
-        if(response.status === 200 && response.data){
-          // window.location.href = response.data.paymentUrl;
+        const response = await axios.post('http://localhost:3003/vnpay/create_payment_url', newPayment)
+        if (response.status === 200 && response.data) {
+          window.location.href = response.data.paymentUrl;
         }
       } catch (error) {
         alert(`Lỗi: ${error?.message}`)
@@ -74,12 +74,12 @@ function Cart() {
     try {
       const productId = product.productId
 
-      const response = await axios.post('http://localhost:3003/cart/delete_product_cart',{
+      const response = await axios.post('http://localhost:3003/cart/delete_product_cart', {
         userId,
         productId
       })
 
-      if(response.status === 200){
+      if (response.status === 200) {
         setCartProducts((prevProducts) =>
           prevProducts.filter((p) => p.productId !== productId))
       }
@@ -92,23 +92,23 @@ function Cart() {
     const updatedQuantity = product.quantity + 1;
 
     try {
-        const response = await axios.post('http://localhost:3003/cart/update', {
-            userId,
-            productId: product.productId._id,
-            quantity: updatedQuantity,
-        });
+      const response = await axios.post('http://localhost:3003/cart/update', {
+        userId,
+        productId: product.productId._id,
+        quantity: updatedQuantity,
+      });
 
-        if (response.status === 200) {
-          setCartProducts((prev) =>
-              prev.map((item) =>
-                  item.productId._id === product.productId._id
-                      ? { ...item, quantity: updatedQuantity }
-                      : item
-              )
-          );
+      if (response.status === 200) {
+        setCartProducts((prev) =>
+          prev.map((item) =>
+            item.productId._id === product.productId._id
+              ? { ...item, quantity: updatedQuantity }
+              : item
+          )
+        );
       }
     } catch (error) {
-        console.error('Error updating product quantity:', error);
+      console.error('Error updating product quantity:', error);
     }
   };
 
@@ -116,23 +116,23 @@ function Cart() {
     const updatedQuantity = Math.max(product.quantity - 1, 0);
 
     try {
-        const response = await axios.post('http://localhost:3003/cart/update', {
-            userId,
-            productId: product.productId._id,
-            quantity: updatedQuantity,
-        });
+      const response = await axios.post('http://localhost:3003/cart/update', {
+        userId,
+        productId: product.productId._id,
+        quantity: updatedQuantity,
+      });
 
-         if (response.status === 200) {
-          setCartProducts((prev) =>
-              prev.map((item) =>
-                  item.productId._id === product.productId._id
-                      ? { ...item, quantity: updatedQuantity }
-                      : item
-              )
-          );
-      } 
+      if (response.status === 200) {
+        setCartProducts((prev) =>
+          prev.map((item) =>
+            item.productId._id === product.productId._id
+              ? { ...item, quantity: updatedQuantity }
+              : item
+          )
+        );
+      }
     } catch (error) {
-        console.error('Error updating product quantity:', error);
+      console.error('Error updating product quantity:', error);
     }
   };
 
@@ -170,14 +170,14 @@ function Cart() {
                       <p>{product?.productId.name_product}</p>
                     </td>
                     <td>
-                    <p className="product-price">
+                      <p className="product-price">
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.productId?.price)}
                       </p>
                     </td>
                     <td>
-                      <button onClick={()=>handleDecrease(product)}>-</button>
+                      <button onClick={() => handleDecrease(product)}>-</button>
                       <span>{product?.quantity}</span>
-                      <button onClick={()=>handleIncrease(product)}>+</button>
+                      <button onClick={() => handleIncrease(product)}>+</button>
                     </td>
                     <td>
                       <p className="remove" onClick={() => handleRemoveProduct(product)}>
@@ -209,7 +209,7 @@ function Cart() {
                       <p>{product?.productId.name_product}</p>
                     </td>
                     <td>
-                    <p className="product-price">
+                      <p className="product-price">
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.productId?.price)}
                       </p>
                       <span>SL: {product?.quantity}</span>

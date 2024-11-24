@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-import Header from './components/header'; 
+import Header from './components/header';
 import Dashboard from './components/dashboard';
 import Products from './views/products';
 import styled from 'styled-components';
@@ -30,14 +30,14 @@ function App() {
         <Sidebar />
         <Content>
           <Routes>
-          <Route path="/users" element={<Users />} />
+            <Route path="/users" element={<Users />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/products" element={<Products/>} />
+            <Route path="/products" element={<Products />} />
             <Route path="/reviseProduct/:productId" element={<ReviseProducts />} />
-            <Route path="/products/FormAddProduct" element={<FormAddProduct/>} />
-            <Route path="/categories" element={<Category/>} />
+            <Route path="/products/FormAddProduct" element={<FormAddProduct />} />
+            <Route path="/categories" element={<Category />} />
             <Route path="/reviseCategory/:categoryId" element={<ReviseCategory />} />
-            <Route path="/categories/FormAddCategory" element={<FormAddCategory/>} />
+            <Route path="/categories/FormAddCategory" element={<FormAddCategory />} />
           </Routes>
         </Content>
       </MainContainer>
