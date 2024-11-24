@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
 import CommentSection from './CommentSection';
-import Grid from '@mui/material/Grid';
 import { FaStar } from 'react-icons/fa';
 
 
