@@ -29,34 +29,40 @@ function Productdetails() {
         fetchProduct();
     }, [id]);
 
-    const handleAddToCart = async (productId) => {
+        const handleAddToCart = async (productId) => {
         if (isLoggedIn) {
-          if (productId !== null) {
-            const data = {
-              userId: localStorage.getItem('userId', null),
-              productId,
-              quantity: (document.getElementById("soluong").value),
-            }
+            if (productId !== null) {
+                const inputQuantity = parseInt(document.getElementById("soluong").value, 10);
+                if (inputQuantity > product.quantity) {
+                    alert("Vượt quá số lượng trong kho");
+                    return;
+                }
     
-            console.log(data)
-            try {
-              const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              if (response.status === 200) {
-                alert('Add to cart successfull')
-              }
-            } catch (error) {
-              console.log(error?.message);
+                const data = {
+                    userId: localStorage.getItem('userId', null),
+                    productId,
+                    quantity: inputQuantity,
+                };
+    
+                console.log(data);
+                try {
+                    const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data, {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    if (response.status === 200) {
+                        alert('Thêm vào giỏ hàng thành công');
+                    }
+                } catch (error) {
+                    console.log(error?.message);
+                }
             }
-          }
         } else {
-          alert("Login to add cart")
-          navigate('/login')
+            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            navigate('/login');
         }
-      };
+    };
     
     return (
         <>
