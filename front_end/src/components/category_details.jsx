@@ -59,30 +59,56 @@ function Product() {
       }
 
     return (
-        <>
-            <Header />
-            <div className="product-grid">
-                {products.length > 0 &&
-                    products.map((product) => (
-                        <div key={product._id} className="product-container" onClick={() => navigate(`/products/${product._id}`)}>
-                            <img
-                                src={product.image_product}
-                                alt={product.name_product}
-                                className="product-image"
-                            />
-                            <p className="product-name">{product.name_product}</p>
-                            <p className="product-price">
-                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                            </p>
-                            <Grid className="add-to-cart-btn" onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}>
-                                Add to Cart
-                            </Grid>
-                        </div>
-                    ))
-                }
-            </div>
-        </>
-    );
-}
+    <>
+      <Header />
+      <div className="product-grid">
+        {products.length > 0 &&
+          products.map((product) => ( 
+            <Grid
+              key={product._id}
+              onClick={() => navigate(`/products/${product._id}`)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="product-container">
+                <img
+                  src={product.image_product}
+                  alt={product.name_product}
+                  className="product-image"
+                />
+                <p className="product-name">{product.name_product}</p>
 
+                <div className="product-ratings">
+                  <p className="average-rating">
+                    {product.averageRating && product.averageRating > 0 ? (
+                      <>
+                        Đánh giá: {product.averageRating.toFixed(1)}
+                        <span style={{ color: '#FFD700', marginLeft: '5px' }}>★</span>
+                      </>
+                    ) : (
+                      'Chưa có đánh giá'
+                    )}
+                  </p>
+                  <p className="total-comments">
+                    Bình luận: {product.totalComments || 0}
+                  </p>
+                </div>
+
+                <p className="product-price">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                </p>
+
+                <Grid
+                  className="add-to-cart-btn"
+                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}
+                >
+                  Add to Cart
+                </Grid>
+              </div>
+            </Grid>
+          ))
+        }
+      </div>
+    </>
+  );
+}
 export default Product;
