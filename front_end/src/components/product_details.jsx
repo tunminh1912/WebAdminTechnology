@@ -35,9 +35,9 @@ function Productdetails() {
                 const data = {
                   userId: localStorage.getItem('userId', null),
                   productId,
-                  quantity: document.getElementById("soluong").value,
+                  quantity: Number(document.getElementById("soluong").value,)
                 }
-      
+                console.log(data)
                   try {
                     const response = await axios.post(`http://localhost:3003/cart/addproduct_cart`, data,{
                       headers: {

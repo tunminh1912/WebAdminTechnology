@@ -51,6 +51,7 @@ function Cart() {
       try {
         const total = totalMoney(selectedProducts)
         const newPayment = {
+          userId,
           products: selectedProducts,
           amount: total,
           bankCode: null,
@@ -59,7 +60,7 @@ function Cart() {
         console.log(newPayment)
         const response = await axios.post('http://localhost:3003/vnpay/create_payment_url',newPayment)
         if(response.status === 200 && response.data){
-          window.location.href = response.data.paymentUrl;
+          // window.location.href = response.data.paymentUrl;
         }
       } catch (error) {
         alert(`Lỗi: ${error?.message}`)

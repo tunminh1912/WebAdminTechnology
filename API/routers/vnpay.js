@@ -1,9 +1,13 @@
 let express = require('express');
 let router = express.Router();
 const moment = require('moment');
+const { Order } = require('../Model/order')
+const { Order_details } = require('../Model/order_details')
+const { Cart } = require('../Model/cart')
+const Product = require('../Model/product.js');
 
 
-router.post('/create_payment_url', function (req, res, next) {
+router.post('/create_payment_url', async function (req, res, next) {
     
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     
@@ -24,6 +28,8 @@ router.post('/create_payment_url', function (req, res, next) {
     let orderId = moment(date).format('DDHHmmss');
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;
+    let userId = req.body.userId;
+    let products = req.body.products
     
     let locale = req.body.language;
     if(locale === null || locale === ''){
@@ -48,6 +54,61 @@ router.post('/create_payment_url', function (req, res, next) {
     }
 
     vnp_Params = sortObject(vnp_Params);
+
+    try {
+        const order = new Order({
+            userId: userId,
+            OrderDate: Date.now(),
+            TotalAmount: amount,
+            OrderCode: orderId,
+            Status: "Đang chờ xác nhận"
+        })
+        
+        await order.save()
+        
+        const orderDetailsPromises = products.map(async (product) => {
+            const {productId, quantity } = product
+
+            const TotalPrice = productId.price * quantity
+
+            const orderDetail = new Order_details({
+                orderId: order._id,
+                productId: productId._id,
+                name_product: productId.name_product,
+                price: productId.price,
+                quantity: quantity,
+                TotalPrice: TotalPrice,
+                CreatedAt: Date.now()
+            })
+            await orderDetail.save()
+
+            let updatedCart = await Cart.findByIdAndUpdate(
+                userId,
+                {$pull: {products: {productId: productId}}}, // Sử dụng $pull để xóa
+                {new: true} // Trả về dữ liệu giỏ hàng sau khi cập nhật
+            );
+
+            if (!updatedCart) {
+                return res.status(404).json({ message: 'Cart not found.' });
+            }
+
+            let updateQuantity = await Product.findByIdAndUpdate(
+                productId._id,
+                { $inc: { quantity: -quantity } }, // Trừ số lượng đã đặt
+                { new: true }
+            )
+
+            if (!updateQuantity) {
+                throw new Error(`Product with ID ${productId._id} not found.`);
+            }
+        })
+
+        await Promise.all(orderDetailsPromises);
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
 
     let querystring = require('qs');
     let signData = querystring.stringify(vnp_Params, { encode: false });
