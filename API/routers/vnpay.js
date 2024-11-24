@@ -7,13 +7,7 @@ const { Cart } = require('../Model/cart')
 const Product = require('../Model/product.js');
 
 
-<<<<<<< HEAD
 router.post('/create_payment_url', async function (req, res, next) {
-    
-=======
-router.post('/create_payment_url', function (req, res, next) {
-
->>>>>>> 6aa65bba262ea6614d50bd1b9ef0462b932676b7
     process.env.TZ = 'Asia/Ho_Chi_Minh';
 
     let date = new Date();
@@ -33,13 +27,8 @@ router.post('/create_payment_url', function (req, res, next) {
     let orderId = moment(date).format('DDHHmmss');
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;
-<<<<<<< HEAD
     let userId = req.body.userId;
     let products = req.body.products
-    
-=======
-
->>>>>>> 6aa65bba262ea6614d50bd1b9ef0462b932676b7
     let locale = req.body.language;
     if (locale === null || locale === '') {
         locale = 'vn';
