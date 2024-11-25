@@ -5,7 +5,7 @@ const OrdersList = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
-  // Lấy danh sách đơn hàng
+
   useEffect(() => {
     axios.get('http://localhost:3003/orders')
       .then(response => {
@@ -16,20 +16,28 @@ const OrdersList = () => {
       });
   }, []);
 
-  // Hàm để lấy chi tiết sản phẩm của đơn hàng
   const handleOrderClick = (orderId) => {
     axios.get(`http://localhost:3003/orders/${orderId}/details`)
       .then(response => {
-        setSelectedOrderDetails(response.data); // Lưu dữ liệu sản phẩm vào state
+        setSelectedOrderDetails(response.data); 
       })
       .catch(error => {
         console.error('There was an error fetching the order details!', error);
       });
   };
 
+  const totalOrders = orders.length;
+  const totalAmount = orders.reduce((sum, order) => {
+    return sum + (parseInt(order.TotalAmount) || 0); 
+  }, 0);
+
   return (
     <div>
       <h2>Orders List</h2>
+      <div style={{ marginBottom: '20px', fontWeight: 'bold' }}>
+        <p>Total Orders: {totalOrders}</p>
+        <p>Total Amount: {totalAmount.toLocaleString('vi-VN')} VND</p>
+      </div>
       <table>
         <thead>
           <tr>
@@ -59,7 +67,6 @@ const OrdersList = () => {
         </tbody>
       </table>
 
-      {/* Hiển thị thông tin chi tiết sản phẩm của đơn hàng khi bấm vào đơn hàng */}
       {selectedOrderDetails && (
         <div>
           <h3>Order Details</h3>
