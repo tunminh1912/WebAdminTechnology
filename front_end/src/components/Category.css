@@ -95,6 +95,43 @@
 }
 
 
+/* Container sắp xếp sản phẩm */
+.sort-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Label cho dropdown */
+.sort-container label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 10px;
+  color: #333;
+}
+
+/* Dropdown sắp xếp */
+.sort-container select {
+  font-size: 14px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Dropdown khi hover */
+.sort-container select:hover {
+  border-color: #888;
+}
+
+
 /* Wrapper chính cho toàn bộ nội dung */
 .productDetailWrapper {
   display: flex;
