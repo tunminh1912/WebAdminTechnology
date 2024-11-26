@@ -84,7 +84,7 @@ const SearchResultsPage = () => {
                     handleAddToCart(product._id);
                   }}
                 >
-                  Thêm vào giỏ
+                  Add to Cart
                 </Grid2>
               </div>
             ))
