@@ -56,35 +56,29 @@ router.post('/addproduct_cart', async (req, res) => {
 
 // update so luong
 router.post('/update', async (req, res) => {
-    const { userId, productId, quantity } = req.body;
+    const { userId, products } = req.body;
+    console.log("Request data:", { userId, products }); 
 
     try {
-        let cart = await Cart.findById(userId);
-
+        let cart = await Cart.findOne({ _id: userId });
         if (!cart) {
-            cart = new Cart({ _id: userId, products: [] });
-        }
-
-        const existingProductIndex = cart.products.findIndex(
-            (item) => item.productId.toString() === productId
-        );
-
-        if (existingProductIndex !== -1) {
-            if (quantity === 0) {
-                cart.products.splice(existingProductIndex, 1);
-            } else {
-                cart.products[existingProductIndex].quantity = quantity;
-            }
-        } else if (quantity > 0) {
-            cart.products.push({ productId, quantity });
+            cart = new Cart({ _id: userId, products });
+        } else {
+            products.forEach((newProduct) => {
+                const productIndex = cart.products.findIndex(p => p.productId.toString() === newProduct.productId);
+                if (productIndex === -1) {
+                    cart.products.push(newProduct);
+                } else {
+                    cart.products[productIndex].quantity = newProduct.quantity;
+                }
+            });
         }
 
         await cart.save();
-
-        return res.status(200).json(cart);
+        res.status(200).json(cart);
     } catch (error) {
-        console.error('Error updating cart:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+        console.error("Error updating cart:", error); // Log lỗi server
+        res.status(500).json({ message: 'Error updating cart', error });
     }
 });
 
@@ -101,7 +95,7 @@ router.post('/delete_product_cart', async (req, res) => {
         if (!updatedCart) {
             return res.status(404).json({ message: 'Cart not found.' });
         }
-        res.status(200).json(updatedCart)
+        res.status(200).json({ message: 'Sản phẩm đã được xóa khỏi giỏ hàng' })
     } catch (error) {
         console.error(error);
     }

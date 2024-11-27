@@ -63,7 +63,7 @@ function Cart() {
           window.location.href = response.data.paymentUrl;
         }
       } catch (error) {
-        alert(`Lỗi: ${error?.message}`)
+        alert(`Lỗi: ${error}`)
       }
     } else {
       alert("Bạn chưa chọn sản phẩm để thanh toán!");
@@ -90,51 +90,55 @@ function Cart() {
 
   const handleIncrease = async (product) => {
     const updatedQuantity = product.quantity + 1;
-
+  
     try {
+      const updatedProducts = cartProducts.map((item) =>
+        item.productId._id === product.productId._id
+          ? { ...item, quantity: updatedQuantity }
+          : item
+      );
+  
       const response = await axios.post('http://localhost:3003/cart/update', {
         userId,
-        productId: product.productId._id,
-        quantity: updatedQuantity,
+        products: updatedProducts.map((item) => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+        })),
       });
-
+  
       if (response.status === 200) {
-        setCartProducts((prev) =>
-          prev.map((item) =>
-            item.productId._id === product.productId._id
-              ? { ...item, quantity: updatedQuantity }
-              : item
-          )
-        );
+        setCartProducts(updatedProducts);
       }
     } catch (error) {
       console.error('Error updating product quantity:', error);
     }
   };
-
+  
   const handleDecrease = async (product) => {
     const updatedQuantity = Math.max(product.quantity - 1, 0);
-
+  
     try {
+      const updatedProducts = cartProducts.map((item) =>
+        item.productId._id === product.productId._id
+          ? { ...item, quantity: updatedQuantity }
+          : item
+      );
+  
       const response = await axios.post('http://localhost:3003/cart/update', {
         userId,
-        productId: product.productId._id,
-        quantity: updatedQuantity,
+        products: updatedProducts.map((item) => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+        })),
       });
-
+  
       if (response.status === 200) {
-        setCartProducts((prev) =>
-          prev.map((item) =>
-            item.productId._id === product.productId._id
-              ? { ...item, quantity: updatedQuantity }
-              : item
-          )
-        );
+        setCartProducts(updatedProducts);
       }
     } catch (error) {
       console.error('Error updating product quantity:', error);
     }
-  };
+  };  
 
 
 
