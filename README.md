@@ -18,6 +18,7 @@ Nguyễn Dương Thuý Ngân
 Công nghệ sử dụng
 
 Node.js
-Express
+React.js
 MongoDB
-React
+
+#FITVAA
