@@ -6,9 +6,9 @@
   
   .profile-sidebar {
     width: 250px;
-    background-color: #fff;
+    background-color: #ffffff; 
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -16,7 +16,7 @@
   
   .profile-sidebar h2 {
     font-size: 20px;
-    color: #333;
+    color: #000000;
     margin-bottom: 20px;
   }
   
@@ -35,7 +35,7 @@
   }
   
   .tab-button.active {
-    background-color: #007bff;
+    background-color: #00000075;
     color: #fff;
   }
   
@@ -48,14 +48,15 @@
     padding: 10px;
     border: none;
     border-radius: 4px;
+    border: 1px solid #0059ff;
     cursor: pointer;
-    background-color: #ff4d4d;
-    color: #fff;
-    margin-top: auto; 
+    background-color: #ffffff;
+    color: #0059ff;
   }
   
   .logout-button:hover {
-    background-color: #e04444;
+    background-color: #447be0;
+    color: white;
   }
   
 
@@ -78,4 +79,98 @@
     color: #555;
     line-height: 1.6;
   }
-  
+
+  /* CSS cho các button bộ lọc đơn hàng */
+.order-filters {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  flex: 1; 
+  padding: 10px 0;
+  text-align: center; 
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #f4f4f4;
+}
+
+.filter-button.active {
+  background-color: #529c30;
+  color: #fff;
+  border-color: #529c30;
+}
+
+/* CSS cho thông báo không có đơn hàng */
+.order-empty {
+  text-align: center;
+  margin-top: 50px;
+  color: #555;
+}
+
+.order-empty img {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.order-empty p {
+  color: #000000;
+  font-size: 20px; 
+  font-weight: 600; 
+  margin-bottom: 5px; 
+}
+
+.order-empty span {
+  color: #919191;
+  font-size: 16px; 
+  font-weight: 400; 
+}
+
+
+.product-suggestions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.product-suggestions button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.product-suggestions button:hover {
+  background-color: #f4f4f4;
+}
+
+.back-home-button {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #529c30;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid #529c30;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-home-button:hover {
+  background-color: #529c30;
+  color: #ffffff;
+}
