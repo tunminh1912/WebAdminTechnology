@@ -53,6 +53,7 @@ const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [visibleProducts, setVisibleProducts] = useState(10); // Số lượng sản phẩm hiển thị
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,27 +99,29 @@ const CategoryComponent = () => {
             },
           });
           if (response.status === 200) {
-            alert('Add to cart successfull')
+            alert('Add to cart successful');
           }
         } catch (error) {
           console.log(error?.message);
         }
       }
     } else {
-      alert("Login to add cart")
-      navigate('/login')
+      alert("Login to add cart");
+      navigate('/login');
     }
   }
 
-return (
+  const handleLoadMore = () => {
+    setVisibleProducts((prev) => prev + 10); // Tăng thêm 10 sản phẩm hiển thị
+  };
+
+  return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '30px' }}>
       <CategoryTitle />
       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', padding: '20px 0' }}>
         {categories.map((category) => (
-          <Grid onClick={() => navigate(`products?category=${category.category_id}`)}>
-            <Stack
-              spacing={3}
-              style={{ cursor: 'pointer' }} >
+          <Grid onClick={() => navigate(`products?category=${category.category_id}`)} key={category.category_id}>
+            <Stack spacing={3} style={{ cursor: 'pointer' }}>
               <CategoryItem
                 image_category={category.image_category}
                 name_category={category.name_category}
@@ -130,10 +133,11 @@ return (
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Sản Phẩm</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          {products.map((product) => (
+      {/* Khung bao toàn bộ sản phẩm */}
+      <div className="product-wrapper">
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center' }}>Sản Phẩm</h2>
+        <div className="product-grid">
+          {products.slice(0, visibleProducts).map((product) => (
             <Grid
               key={product._id}
               onClick={() => navigate(`/products/${product._id}`)}
@@ -169,17 +173,27 @@ return (
 
                 <Grid2
                   className="add-to-cart-btn"
-                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id) }}
+                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product._id); }}
                 >
                   Add to Cart
                 </Grid2>
               </div>
             </Grid>
           ))}
-
         </div>
+
+        {/* Nút xem thêm */}
+        {visibleProducts < products.length && (
+          <div className="load-more-container">
+            <button className="load-more-btn" onClick={handleLoadMore}>
+              Xem thêm
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
 };
+
 export default CategoryComponent;
