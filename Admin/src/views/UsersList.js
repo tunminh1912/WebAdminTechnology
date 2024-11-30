@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './User.css';
-import Header from "./Navbar";
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -30,7 +29,6 @@ const User = () => {
       console.error('Error deleting user:', error);
     }
   };
-<Header/>
   return (
     <div className="user-container">
       <h2 className="user-title">User List</h2>

@@ -12,6 +12,9 @@ const vnpay_router = require('./routers/vnpay')
 const commentRoutes = require('./routers/comments');
 const orderRouter = require('./routers/orders');
 const orderDetailsRouter = require('./routers/order_details');
+const Order = require('./Model/order');
+const Order_Details = require('./Model/order_details')
+
 
 const app = express();
 app.use(cors());
@@ -132,6 +135,7 @@ app.get('/categories', async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
+
 
 // Bắt đầu server
 const startServer = async () => {

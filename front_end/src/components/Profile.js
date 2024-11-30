@@ -1,41 +1,90 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
-import Header from "./Navbar";
+import Header from './Navbar';
 
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState('orders');
+  const [orders, setOrders] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [orderDetails, setOrderDetails] = useState({});
+  const [detailsLoading, setDetailsLoading] = useState({});
+
+  const fetchOrders = useCallback(async () => {
+    setOrdersLoading(true);
+    const userId = localStorage.getItem('userId', null)
+  
+    try {
+      const response = await axios.get(
+        `http://localhost:3003/orders/getorder?userId=${userId}&status=${(selectedStatus)}`,
+      );
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Không thể lấy danh sách đơn hàng:', error);
+      setOrders([]);
+    } finally {
+      setOrdersLoading(false);
+    }
+  }, [selectedStatus]);  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
+      return;
     }
 
     const fetchUserProfile = async () => {
       try {
         const response = await axios.get('http://localhost:3003/api/profile', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (response.status === 200) {
-          setUser(response.data);
-        } else {
-          console.error('Failed to fetch user profile:', response.data);
-        }
-        setLoading(false);
+        setUser(response.data);
       } catch (error) {
-        console.error('Failed to fetch user profile:', error);
+        console.error('Không thể lấy thông tin người dùng:', error);
+        navigate('/login');
+      } finally {
         setLoading(false);
       }
     };
 
     fetchUserProfile();
   }, [navigate]);
+
+  useEffect(() => {
+    if (selectedTab === 'orders') {
+      fetchOrders();
+    }
+  }, [selectedTab, fetchOrders]);
+
+  const fetchOrderDetails = async (orderId) => {
+    if (orderDetails[orderId]) return; 
+    setDetailsLoading((prev) => ({ ...prev, [orderId]: true }));
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get(`http://localhost:3003/orders/${orderId}/details`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOrderDetails(prevState => ({
+        ...prevState,
+        [orderId]: response.data
+      }));
+    } catch (error) {
+      console.error('Không thể lấy chi tiết đơn hàng:', error);
+      setOrderDetails(prevState => ({
+        ...prevState,
+        [orderId]: null
+      }));
+    } finally {
+      setDetailsLoading((prev) => ({ ...prev, [orderId]: false }));
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('userId');
@@ -45,69 +94,122 @@ const Profile = () => {
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
+    setOrderDetails({}); 
+  };
+
+  const handleStatusChange = (status) => {
+    setSelectedStatus(status);
+    setOrderDetails({}); 
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Đang tải thông tin người dùng...</p>;
   }
 
   return (
     <>
-    <Header />
-    <div className="profile-container">
-      <div className="profile-sidebar">
-        <h2>Xin chào, {user ? user.username : 'User'}</h2>
-        <button
-          onClick={() => handleTabChange('orders')}
-          className={`tab-button ${selectedTab === 'orders' ? 'active' : ''}`}
-        >
-          Đơn hàng đã mua
-        </button>
-        <button
-          onClick={() => handleTabChange('info')}
-          className={`tab-button ${selectedTab === 'info' ? 'active' : ''}`}
-        >
-          Thông tin cá nhân
-        </button>
-        <button onClick={handleLogout} className="logout-button">
-          Đăng xuất
-        </button>
-      </div>
-      <div className="profile-content">
-        {selectedTab === 'orders' ? (
-          <div className="orders-content">
-          <h2>Đơn hàng đã mua</h2>
-          <div className="order-filters">
-            <button className="filter-button">Tất cả</button>
-            <button className="filter-button">Chờ xác nhận</button>
-            <button className="filter-button">Đang giao hàng</button>
-            <button className="filter-button">Đã giao</button>
-          </div>
-          <div className="order-empty">
-          <RemoveShoppingCartIcon style={{ fontSize: '100px', color: '#d32f2f', marginBottom: '10px' }} />
-            <p>Rất tiếc, không tìm thấy đơn hàng nào phù hợp</p>
-            <span>Vẫn còn rất nhiều sản phẩm đang chờ bạn</span>
-            <div className="product-suggestions">
-              <button onClick={() => navigate('/products?category=1')}>Điện thoại</button>
-              <button onClick={() => navigate('/products?category=2')}>Máy tính bảng</button>
-              <button onClick={() => navigate('/products?category=3')}>Laptop</button>
-              <button onClick={() => navigate('/products?category=5')}>Máy tính để bàn</button>
-              <button onClick={() => navigate('/products?category=6')}>Máy in</button>
-              <button onClick={() => navigate('/products?category=7')}>Máy ảnh</button>
-              <button onClick={() => navigate('/products?category=4')}>Đồng hồ</button>
-            </div>
-            <button className="back-home-button"  onClick={() => navigate('/')}>Về trang chủ</button>
-          </div>
+      <Header />
+      <div className="profile-container">
+        <div className="profile-sidebar">
+          <h2>Xin chào, {user ? user.username : 'User'}</h2>
+          <button
+            onClick={() => handleTabChange('orders')}
+            className={`tab-button ${selectedTab === 'orders' ? 'active' : ''}`}
+          >
+            Đơn hàng đã mua
+          </button>
+          <button
+            onClick={() => handleTabChange('info')}
+            className={`tab-button ${selectedTab === 'info' ? 'active' : ''}`}
+          >
+            Thông tin cá nhân
+          </button>
+          <button onClick={handleLogout} className="logout-button">
+            Đăng xuất
+          </button>
         </div>
-        ) : (
-          <div className="info-content">
-            <h2>Thông tin cá nhân</h2>
-            <p>Tên: {user ? user.username : 'N/A'}</p>
-            <p>Email: {user ? user.email : 'N/A'}</p>
-          </div>
-        )}
+        <div className="profile-content">
+          {selectedTab === 'orders' && (
+            <div className="orders-content">
+              <h2>Đơn hàng đã mua</h2>
+              <div className="order-filters">
+                <button onClick={() => handleStatusChange('')} className="filter-button">
+                  Tất cả
+                </button>
+                <button onClick={() => handleStatusChange('Đang chờ xác nhận')} className="filter-button">
+                  Chờ xác nhận
+                </button>
+                <button onClick={() => handleStatusChange('Đang giao')} className="filter-button">
+                  Đang giao hàng
+                </button>
+                <button onClick={() => handleStatusChange('Đã giao')} className="filter-button">
+                  Đã giao
+                </button>
+              </div>
+
+              {ordersLoading ? (
+                <p>Đang tải đơn hàng...</p>
+              ) : orders.length === 0 ? (
+                <div className="order-empty">
+                <RemoveShoppingCartIcon style={{ fontSize: '100px', color: '#d32f2f', marginBottom: '10px' }} />
+                  <p>Rất tiếc, không tìm thấy đơn hàng nào phù hợp</p>
+                  <span>Vẫn còn rất nhiều sản phẩm đang chờ bạn</span>
+                  <div className="product-suggestions">
+                    <button onClick={() => navigate('/products?category=1')}>Điện thoại</button>
+                    <button onClick={() => navigate('/products?category=2')}>Máy tính bảng</button>
+                    <button onClick={() => navigate('/products?category=3')}>Laptop</button>
+                    <button onClick={() => navigate('/products?category=5')}>Máy tính để bàn</button>
+                    <button onClick={() => navigate('/products?category=6')}>Máy in</button>
+                    <button onClick={() => navigate('/products?category=7')}>Máy ảnh</button>
+                    <button onClick={() => navigate('/products?category=4')}>Đồng hồ</button>
+                  </div>
+                  <button className="back-home-button"  onClick={() => navigate('/')}>Về trang chủ</button>
+                </div>
+              ) : (
+                <div className="order-list">
+                  {orders.map((order) => (
+                    <div key={order._id} className="order-item" onClick={() => fetchOrderDetails(order._id)}>
+                      <p>Mã đơn hàng: {order.OrderCode}</p>
+                      <p>Ngày đặt: {new Date(order.OrderDate).toLocaleDateString()}</p>
+                      <p>Tổng tiền: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.TotalAmount)}
+                      </p>
+                      <p>Trạng thái: {order.Status}</p>
+
+                      {detailsLoading[order._id] && <p>Đang tải chi tiết đơn hàng...</p>}
+
+                      {orderDetails[order._id] ? (
+                        <div className="order-details">
+                          <h3>Chi tiết đơn hàng</h3>
+                          {orderDetails[order._id].map((detail) => (
+                            <div key={detail._id} className="order-detail-item">
+                              <p>Sản phẩm: {detail.name_product}</p>
+                              <p>Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.price)}
+                              </p>
+                              <p>Số lượng: {detail.quantity}</p>
+                              <p>Thời gian đặt hàng: {detail.CreatedAt}</p>
+                              <p>Tổng giá: {detail.TotalPrice}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        orderDetails[order._id] === null && <p>Không thể tải chi tiết.</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {selectedTab === 'info' && (
+            <div className="info-content">
+              <h2>Thông tin cá nhân</h2>
+              <p>Tên: {user ? user.username : 'N/A'}</p>
+              <p>Email: {user ? user.email : 'N/A'}</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };

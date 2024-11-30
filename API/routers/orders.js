@@ -39,6 +39,23 @@ orderRouter.put('/:orderId/status', async (req, res) => {
       res.status(500).json({ error: 'Lỗi server' });
     }
   });
+
+  orderRouter.get('/getorder', async (req, res) => {
+    try {
+      const { userId, status } = req.query; 
   
+      let filter = { userId: userId };
+  
+      if (status) {
+        filter.Status = status; 
+      }
+  
+      const get = await Order.find(filter);
+  
+      res.status(200).json(get);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  });  
 
 module.exports = orderRouter;
