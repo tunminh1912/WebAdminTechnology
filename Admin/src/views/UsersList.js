@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './User.css';
-<<<<<<< HEAD
-=======
-
->>>>>>> 3c64537087c0dd2dea3fa36d59c63c27132a706d
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -33,10 +29,6 @@ const User = () => {
       console.error('Error deleting user:', error);
     }
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> 3c64537087c0dd2dea3fa36d59c63c27132a706d
   return (
     <div className="user-container">
       <h2 className="user-title">User List</h2>
