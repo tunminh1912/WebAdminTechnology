@@ -494,7 +494,7 @@
 .similarProductsWrapper {
   width: 100%;
   max-width: 1200px;
-  height: auto; /* Tự động điều chỉnh chiều cao */
+  height: auto; 
   margin: 20px auto;
   padding: 10px;
   background-color: #ffffff;
@@ -504,7 +504,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden; /* Ẩn mọi nội dung vượt khung */
+  overflow: hidden; 
 }
 
 .similarProductsSlider {
@@ -518,21 +518,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Đảm bảo mọi thứ trong card được căn giữa */
+  justify-content: center; 
   width: 120px;
   height: auto;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
   background: #f9f9f9;
-  text-align: center; /* Đảm bảo text luôn căn giữa */
+  text-align: center; 
 }
 
 .similarProductImage {
   width: 80%;
-  height: 120px; /* Đặt chiều cao cố định để hình ảnh đồng nhất */
-  object-fit: contain; /* Giữ nguyên tỷ lệ hình ảnh */
-  margin-bottom: 10px; /* Thêm khoảng cách giữa hình ảnh và tên sản phẩm */
+  height: 120px; 
+  object-fit: contain; 
+  margin-bottom: 10px;
 }
 
 .similarProductName,
@@ -541,7 +541,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #333;
-  line-height: 1.5; /* Điều chỉnh line-height để tạo khoảng cách đều giữa các phần tử */
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -560,5 +560,5 @@
 .average-rating,
 .total-comments {
   font-size: 10px;
-  line-height: 1.2; /* Cải thiện khoảng cách giữa các dòng */
+  line-height: 1.2; 
 }
