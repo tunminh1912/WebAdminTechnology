@@ -90,5 +90,20 @@ router.get('/category/:category_id', async (req, res) => {
   }
 });
 
+router.get('/similar/:category_id', async (req, res) => {
+  const { category_id } = req.params;
+  console.log("Fetching similar products for category_id:", category_id); // Thêm log
+  try {
+      const similarProducts = await Product.find({ category_id }).limit(10);
+      if (similarProducts.length === 0) {
+          return res.status(404).json({ message: 'Không tìm thấy sản phẩm tương tự' });
+      }
+      res.status(200).json(similarProducts);
+  } catch (err) {
+      console.error("Error fetching similar products:", err); // Log lỗi
+      res.status(500).json({ error: 'Lỗi khi lấy sản phẩm tương tự', details: err });
+  }
+});
+
 // Xuất router và upload
 module.exports = { router, upload };
