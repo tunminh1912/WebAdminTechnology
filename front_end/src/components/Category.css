@@ -490,3 +490,75 @@
 .star.filled {
   color: #FFD700; /* Màu vàng cho sao được chọn */
 }
+
+.similarProductsWrapper {
+  width: 100%;
+  max-width: 1200px;
+  height: auto; /* Tự động điều chỉnh chiều cao */
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 2px solid #ece8e8;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden; /* Ẩn mọi nội dung vượt khung */
+}
+
+.similarProductsSlider {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.similarProductCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Đảm bảo mọi thứ trong card được căn giữa */
+  width: 120px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  background: #f9f9f9;
+  text-align: center; /* Đảm bảo text luôn căn giữa */
+}
+
+.similarProductImage {
+  width: 80%;
+  height: 120px; /* Đặt chiều cao cố định để hình ảnh đồng nhất */
+  object-fit: contain; /* Giữ nguyên tỷ lệ hình ảnh */
+  margin-bottom: 10px; /* Thêm khoảng cách giữa hình ảnh và tên sản phẩm */
+}
+
+.similarProductName,
+.similarProductPrice,
+.similarProductRatings {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.5; /* Điều chỉnh line-height để tạo khoảng cách đều giữa các phần tử */
+  text-align: center;
+}
+
+.similarProductName {
+  font-weight: bold;
+}
+
+.similarProductPrice {
+  color: red;
+}
+
+.similarProductRatings {
+  color: #555;
+}
+
+.average-rating,
+.total-comments {
+  font-size: 10px;
+  line-height: 1.2; /* Cải thiện khoảng cách giữa các dòng */
+}
