@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Grid } from '@mui/material';
 import './Category.css';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -10,6 +11,7 @@ import { FaStar } from 'react-icons/fa';
 function Productdetails() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [similarProducts, setSimilarProducts] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
@@ -30,6 +32,20 @@ function Productdetails() {
         setIsLoggedIn(!!token);
         fetchProduct();
     }, [id]);
+
+    useEffect(() => {
+        async function fetchSimilarProducts() {
+            if (product?.category_id) {
+                try {
+                    const response = await axios.get(`http://localhost:3003/products/similar/${product.category_id}`);
+                    if (response.status === 200) setSimilarProducts(response.data);
+                } catch (error) {
+                    console.log('Lỗi khi tải sản phẩm tương tự:', error?.message);
+                }
+            }
+        }
+        fetchSimilarProducts();
+    }, [product?.category_id]);
 
         const handleAddToCart = async (productId) => {
         if (isLoggedIn) {
@@ -64,6 +80,42 @@ function Productdetails() {
             navigate('/login');
         }
     };
+
+    const renderProduct = (product, onAddToCart, navigate) => (
+        <Grid
+            key={product._id}
+            onClick={() => navigate(`/products/${product._id}`)}
+            style={{ cursor: 'pointer' }}
+        >
+            <div className="similarProductCard">
+                <div className="similarProductImageWrapper">
+                    <img
+                        src={product.image_product}
+                        alt={product.name_product}
+                        className="similarProductImage"
+                    />
+                </div>
+                <p className="similarProductName">{product.name_product}</p>
+                <p className="similarProductPrice">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                </p>
+                <div className="similarProductRatings">
+                    <p className="average-rating">
+                        {product.averageRating && product.averageRating > 0 ? (
+                            <>
+                                {product.averageRating.toFixed(1)} <span style={{ color: '#FFD700' }}>★</span>
+                            </>
+                        ) : (
+                            'Chưa có đánh giá'
+                        )}
+                    </p>
+                    <p className="total-comments">
+                        {product.totalComments || 0} Bình luận
+                    </p>
+                </div>
+            </div>
+        </Grid>
+    );
     
     return (
         <>
@@ -139,6 +191,14 @@ function Productdetails() {
             </div>
 
             <CommentSection productId={id} />
+            <div className="similarProductsWrapper">
+            <h2>Sản Phẩm Tương Tự</h2>
+            <div className="similarProductsSlider">
+            {similarProducts.map((similarProduct) =>
+                        renderProduct(similarProduct, handleAddToCart, navigate)
+                    )}
+            </div>
+            </div>
 
         </>
 
