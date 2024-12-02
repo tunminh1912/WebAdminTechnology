@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;
-  border: 2px solid #ece8e8;
+  border: 2px solid #fbfbfb;
   border-radius: 15px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 }
@@ -489,4 +489,85 @@
 
 .star.filled {
   color: #FFD700; /* Màu vàng cho sao được chọn */
+}
+
+.similarProductsWrapper {
+  width: 100%;
+  max-width: 1200px;
+  height: auto; 
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 2px solid #ece8e8;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden; 
+}
+
+.similarProductsSlider {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.similarProductCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Căn trái nội dung trong khung */
+  justify-content: space-between; /* Đưa nội dung đến hai đầu khung */
+  width: 120px;
+  height: 300px; /* Chiều cao cố định cho khung */
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  background: #f9f9f9;
+  text-align: left; /* Căn lề trái mặc định */
+  position: relative; /* Dễ chỉnh sửa layout hơn */
+}
+
+.similarProductImage {
+  width: 100%; 
+  height: 150px;
+  object-fit: contain; 
+  margin-bottom: 10px;
+}
+
+.similarProductName {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  text-align: left; /* Căn trái */
+  margin-bottom: 10px;
+}
+
+.similarProductPrice {
+  font-size: 12px;
+  color: red;
+  font-weight: bold;
+  margin: 0 0 5px 0; /* Giữ giá cách đều với đánh giá */
+}
+
+.similarProductRatings {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+
+.average-rating,
+.total-comments {
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: left; 
+  width: 100%;
+  margin: 2px 0; 
+}
+
+.similarProductCard > .bottom-content {
+  margin-top: auto; 
+  width: 100%;
 }
