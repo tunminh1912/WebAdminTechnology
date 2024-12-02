@@ -22,8 +22,7 @@ function CommentSection({ productId }) {
                 headers: { "Content-Type": "application/json" },
             });
 
-            console.log(response.data); // Kiểm tra dữ liệu trả về từ API
-
+            console.log(response.data); 
             if (response.data) {
                 if (Array.isArray(response.data.users)) {
                     setComments(response.data.users); // Lấy danh sách bình luận
