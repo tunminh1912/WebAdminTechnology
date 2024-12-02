@@ -5,7 +5,6 @@ const router = express.Router();
 router.get('/:orderId/details', async (req, res) => {
     try {
         const { orderId } = req.params; 
-
         const orderDetails = await Order_details.find({ orderId: orderId })
             .populate('productId') 
             .populate('orderId');  

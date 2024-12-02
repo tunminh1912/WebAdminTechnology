@@ -49,7 +49,6 @@ orderRouter.put('/:orderId/status', async (req, res) => {
       if (status) {
         filter.Status = status; 
       }
-  
       const get = await Order.find(filter);
   
       res.status(200).json(get);
