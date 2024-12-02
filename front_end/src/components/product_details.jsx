@@ -100,18 +100,20 @@ function Productdetails() {
                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                 </p>
                 <div className="similarProductRatings">
-                    <p className="average-rating">
-                        {product.averageRating && product.averageRating > 0 ? (
-                            <>
-                                {product.averageRating.toFixed(1)} <span style={{ color: '#FFD700' }}>★</span>
-                            </>
-                        ) : (
-                            'Chưa có đánh giá'
-                        )}
-                    </p>
-                    <p className="total-comments">
-                        {product.totalComments || 0} Bình luận
-                    </p>
+                    <p className="product-rating">
+    {product.averageRating && product.averageRating > 0 ? (
+        <>
+            {product.averageRating.toFixed(1)} <span style={{ color: '#FFD700' }}>★</span>
+        </>
+    ) : (
+        'Chưa có đánh giá'
+    )}
+</p>
+
+                    <p className="product-comments">
+    {product.totalComments || 0} Bình luận
+</p>
+
                 </div>
             </div>
         </Grid>
