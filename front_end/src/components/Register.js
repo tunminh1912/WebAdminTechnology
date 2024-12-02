@@ -6,11 +6,12 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [address, setAddress] = useState(''); // Thêm state cho địa chỉ
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:3003/api/register', { username, email, password });
+      await axios.post('http://localhost:3003/api/register', { username, email, password, address });
       navigate('/login');
     } catch (error) {
       console.error('Registration failed:', error);
@@ -101,6 +102,11 @@ const Register = () => {
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Address"
+          onChange={(e) => setAddress(e.target.value)} // Thêm input cho địa chỉ
         />
         <button onClick={handleRegister}>Register</button>
 

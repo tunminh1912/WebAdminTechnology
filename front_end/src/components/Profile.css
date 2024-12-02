@@ -267,5 +267,70 @@
 .order-detail-item p:last-child {
   color: #171414; 
 }
+.address-edit-container {
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử theo chiều ngang */
+  gap: 10px; /* Khoảng cách giữa input và các nút */
+}
 
+/* Căn chỉnh ô nhập địa chỉ */
+.address-edit-container input[type="text"] {
+  width: 100%; /* Chiếm toàn bộ chiều ngang */
+  max-width: 300px; /* Giới hạn chiều ngang tối đa */
+  padding: 10px; /* Thêm khoảng cách bên trong */
+  border: 1px solid #ccc; /* Viền nhạt */
+  border-radius: 20px; /* Bo tròn */
+  font-size: 14px; /* Cỡ chữ */
+  outline: none; /* Xóa viền mặc định khi focus */
+  box-sizing: border-box; /* Bao gồm padding vào kích thước */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng focus */
+}
 
+/* Hiệu ứng khi focus vào ô nhập địa chỉ */
+.address-edit-container input[type="text"]:focus {
+  border-color: #007bff; /* Viền xanh */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Hiệu ứng ánh sáng */
+}
+
+/* Căn chỉnh nút */
+.address-edit-container .save-address-button,
+.address-edit-container .cancel-address-button {
+  padding: 8px 16px; /* Kích thước nút */
+  border-radius: 20px; /* Bo tròn nút */
+  border: none; /* Xóa viền */
+  font-size: 14px; /* Cỡ chữ */
+  cursor: pointer; /* Con trỏ chuột */
+}
+
+.save-address-button {
+  background-color: #28a745; /* Màu nền xanh lá */
+  color: white; /* Màu chữ trắng */
+}
+
+.save-address-button:hover {
+  background-color: #218838; /* Màu xanh đậm hơn khi hover */
+}
+
+.cancel-address-button {
+  background-color: #dc3545; /* Màu nền đỏ */
+  color: white; /* Màu chữ trắng */
+}
+
+.cancel-address-button:hover {
+  background-color: #c82333; 
+}
+.edit-address-button {
+  padding: 5px 10px; /* Tăng kích thước nút */
+  font-size: 14px; /* Cỡ chữ lớn hơn */
+  background-color: white; /* Nền màu trắng */
+  color: #007bff; /* Chữ màu xanh */
+  border: 2px solid #007bff; /* Viền màu xanh */
+  border-radius: 10px; /* Bo tròn */
+  cursor: pointer; /* Con trỏ chuột */
+  transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi mượt */
+}
+
+.edit-address-button:hover {
+  background-color: #007bff; /* Nền màu xanh khi hover */
+  color: white; /* Chữ màu trắng khi hover */
+}

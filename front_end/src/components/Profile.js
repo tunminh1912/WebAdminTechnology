@@ -15,14 +15,17 @@ const Profile = () => {
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [orderDetails, setOrderDetails] = useState({});
   const [detailsLoading, setDetailsLoading] = useState({});
+  const [newAddress, setNewAddress] = useState('');
+  const [addressError, setAddressError] = useState('');
+  const [isAddressEditing, setIsAddressEditing] = useState(false); // To toggle address editing
 
   const fetchOrders = useCallback(async () => {
     setOrdersLoading(true);
-    const userId = localStorage.getItem('userId', null)
-  
+    const userId = localStorage.getItem('userId', null);
+
     try {
       const response = await axios.get(
-        `http://localhost:3003/orders/getorder?userId=${userId}&status=${(selectedStatus)}`,
+        `http://localhost:3003/orders/getorder?userId=${userId}&status=${selectedStatus}`
       );
       setOrders(response.data);
     } catch (error) {
@@ -31,7 +34,7 @@ const Profile = () => {
     } finally {
       setOrdersLoading(false);
     }
-  }, [selectedStatus]);  
+  }, [selectedStatus]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,6 +49,7 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);
+        setNewAddress(response.data.address || '');
       } catch (error) {
         console.error('Không thể lấy thông tin người dùng:', error);
         navigate('/login');
@@ -64,20 +68,20 @@ const Profile = () => {
   }, [selectedTab, fetchOrders]);
 
   const fetchOrderDetails = async (orderId) => {
-    if (orderDetails[orderId]) return; 
+    if (orderDetails[orderId]) return;
     setDetailsLoading((prev) => ({ ...prev, [orderId]: true }));
     const token = localStorage.getItem('token');
     try {
       const response = await axios.get(`http://localhost:3003/orders/${orderId}/details`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setOrderDetails(prevState => ({
+      setOrderDetails((prevState) => ({
         ...prevState,
         [orderId]: response.data
       }));
     } catch (error) {
       console.error('Không thể lấy chi tiết đơn hàng:', error);
-      setOrderDetails(prevState => ({
+      setOrderDetails((prevState) => ({
         ...prevState,
         [orderId]: null
       }));
@@ -94,12 +98,35 @@ const Profile = () => {
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
-    setOrderDetails({}); 
+    setOrderDetails({});
   };
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
-    setOrderDetails({}); 
+    setOrderDetails({});
+  };
+
+  const handleAddressChange = async () => {
+    setAddressError(''); // Reset any previous error
+    const token = localStorage.getItem('token');
+    if (!newAddress.trim()) {
+      setAddressError('Địa chỉ không được để trống!');
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        'http://localhost:3003/api/profile', // API cập nhật địa chỉ
+        { address: newAddress },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setUser(response.data); // Cập nhật thông tin người dùng với địa chỉ mới
+      setIsAddressEditing(false); // Close the address edit input
+      alert('Cập nhật địa chỉ thành công!');
+    } catch (error) {
+      console.error('Không thể cập nhật địa chỉ:', error);
+      alert('Có lỗi khi cập nhật địa chỉ!');
+    }
   };
 
   if (loading) {
@@ -151,7 +178,7 @@ const Profile = () => {
                 <p>Đang tải đơn hàng...</p>
               ) : orders.length === 0 ? (
                 <div className="order-empty">
-                <RemoveShoppingCartIcon style={{ fontSize: '100px', color: '#d32f2f', marginBottom: '10px' }} />
+                  <RemoveShoppingCartIcon style={{ fontSize: '100px', color: '#d32f2f', marginBottom: '10px' }} />
                   <p>Rất tiếc, không tìm thấy đơn hàng nào phù hợp</p>
                   <span>Vẫn còn rất nhiều sản phẩm đang chờ bạn</span>
                   <div className="product-suggestions">
@@ -163,7 +190,7 @@ const Profile = () => {
                     <button onClick={() => navigate('/products?category=7')}>Máy ảnh</button>
                     <button onClick={() => navigate('/products?category=4')}>Đồng hồ</button>
                   </div>
-                  <button className="back-home-button"  onClick={() => navigate('/')}>Về trang chủ</button>
+                  <button className="back-home-button" onClick={() => navigate('/')}>Về trang chủ</button>
                 </div>
               ) : (
                 <div className="order-list">
@@ -183,17 +210,12 @@ const Profile = () => {
                           {orderDetails[order._id].map((detail) => (
                             <div key={detail._id} className="order-detail-item">
                               <p>Sản phẩm: {detail.name_product}</p>
-                              <p>Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.price)}
-                              </p>
+                              <p>Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.price_product)}</p>
                               <p>Số lượng: {detail.quantity}</p>
-                              <p>Thời gian đặt hàng: {detail.CreatedAt}</p>
-                              <p>Tổng giá: {detail.TotalPrice}</p>
                             </div>
                           ))}
                         </div>
-                      ) : (
-                        orderDetails[order._id] === null && <p>Không thể tải chi tiết.</p>
-                      )}
+                      ) : null}
                     </div>
                   ))}
                 </div>
@@ -204,10 +226,45 @@ const Profile = () => {
           {selectedTab === 'info' && (
             <div className="info-content">
               <h2>Thông tin cá nhân</h2>
+
               <p>Tên: {user ? user.username : 'N/A'}</p>
               <p>Email: {user ? user.email : 'N/A'}</p>
+
+              <div className="info-item">
+                <label>Địa chỉ: </label>
+                <div className="address-container">
+                  <p>{user && user.address ? user.address : 'Chưa cập nhật'}</p>
+
+                  {/* Nếu không phải chế độ chỉnh sửa, hiển thị nút Cập nhật địa chỉ */}
+                  {!isAddressEditing && (
+                    <button onClick={() => setIsAddressEditing(true)} className="edit-address-button">
+                      Cập nhật địa chỉ
+                    </button>
+                  )}
+
+                  {/* Nếu đang ở chế độ chỉnh sửa địa chỉ */}
+                  {isAddressEditing && (
+                    <div className="address-edit-container">
+                      <input
+                        type="text"
+                        value={newAddress}
+                        onChange={(e) => setNewAddress(e.target.value)}
+                        placeholder="Nhập địa chỉ mới"
+                      />
+                      <button onClick={handleAddressChange} className="save-address-button">
+                        Lưu
+                      </button>
+                      <button onClick={() => setIsAddressEditing(false)} className="cancel-address-button">
+                        Hủy
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {addressError && <p className="error-message">{addressError}</p>}
+              </div>
             </div>
           )}
+
         </div>
       </div>
     </>

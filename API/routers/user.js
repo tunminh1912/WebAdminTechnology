@@ -15,6 +15,7 @@ user_router.post('/register', async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: hash,
+            address: req.body.address, // Lưu địa chỉ từ request
         });
 
         await newUser.save();
@@ -81,9 +82,42 @@ user_router.get('/profile', async (req, res) => {
             const user = await User.findById(decoded.id);
             if (!user) return res.status(404).json({ message: 'User not found' });
 
-            res.status(200).json({ username: user.username, email: user.email }); // Trả về thông tin người dùng
+            res.status(200).json({ username: user.username, email: user.email, address: user.address || 'Chưa cập nhật', }); 
         } catch (error) {
             res.status(500).json({ message: 'Error fetching user' });
+        }
+    });
+});
+
+user_router.put('/profile', async (req, res) => {
+    const token = req.headers['authorization']; // Lấy token từ headers
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token.split(' ')[1], 'your_jwt_secret_key', async (err, decoded) => {
+        if (err) return res.status(403).json({ message: 'Invalid token' });
+
+        try {
+            // Lấy thông tin địa chỉ mới từ body
+            const { address } = req.body;
+
+            // Tìm người dùng bằng ID từ token
+            const user = await User.findById(decoded.id);
+            if (!user) return res.status(404).json({ message: 'User not found' });
+
+            // Cập nhật địa chỉ mới
+            user.address = address || user.address; // Nếu không có địa chỉ mới, giữ nguyên địa chỉ cũ
+
+            await user.save(); // Lưu thay đổi
+
+            // Trả về thông tin đã cập nhật
+            res.status(200).json({
+                username: user.username,
+                email: user.email,
+                address: user.address,
+            });
+        } catch (error) {
+            console.error('Error updating user:', error);
+            res.status(500).json({ message: 'Error updating user' });
         }
     });
 });
