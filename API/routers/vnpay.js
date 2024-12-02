@@ -160,9 +160,21 @@ router.get('/vnpay_return', function (req, res, next) {
                                 <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
                                 <p><strong>Payment Method:</strong> ${vnp_Params['vnp_BankCode'] || 'Unknown'}</p>
                             </div>
-                            <div class="button">
-                                <button onclick="window.location.href='http://localhost:3000/'">DONE</button>
-                            </div>
+                        <div class="button">
+                            <button onclick="goBack()">DONE</button>
+                        </div>
+
+                        <script>
+                        function goBack() {
+                            // Android 
+                            if (window.AndroidInterface) {
+                                window.AndroidInterface.paymentSuccess();
+                            }
+                            
+                            // web 
+                            window.location.href = 'http://localhost:3000/';
+                        }
+                        </script>
                         </div>
                     </body>
                 </html>
