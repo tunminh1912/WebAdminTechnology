@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    address: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 }, { timestamps: true })
