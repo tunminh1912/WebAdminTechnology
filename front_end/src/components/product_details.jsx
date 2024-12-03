@@ -7,7 +7,6 @@ import Header from "./Navbar";
 import CommentSection from './CommentSection';
 import { FaStar } from 'react-icons/fa';
 
-
 function Productdetails() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
@@ -183,7 +182,7 @@ function Productdetails() {
                                 </>
                             )}
                         </div>
-                        
+
                         <div className="productDescriptionWrapper">
                             <h2>Mô Tả Sản Phẩm</h2>
                             <p className="productDescription">{product.description}</p>
@@ -197,7 +196,7 @@ function Productdetails() {
             <h2>Sản Phẩm Tương Tự</h2>
             <div className="similarProductsSlider">
             {similarProducts.map((similarProduct) =>
-                        renderProduct(similarProduct, handleAddToCart, navigate)
+                    renderProduct(similarProduct, handleAddToCart, navigate)
                     )}
             </div>
             </div>
