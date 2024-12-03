@@ -4,6 +4,8 @@ import './Category.css';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "./Navbar";
+import Benefit from "./Benefit"
+import Footer from "./Footer"
 import CommentSection from './CommentSection';
 import { FaStar } from 'react-icons/fa';
 
@@ -200,8 +202,8 @@ function Productdetails() {
                     )}
             </div>
             </div>
-
-        </>
+<Benefit/>
+<Footer/></>
 
     );
 }

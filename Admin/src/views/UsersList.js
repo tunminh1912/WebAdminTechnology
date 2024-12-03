@@ -29,6 +29,7 @@ const User = () => {
       console.error('Error deleting user:', error);
     }
   };
+
   return (
     <div className="user-container">
       <h2 className="user-title">User List</h2>
@@ -41,6 +42,7 @@ const User = () => {
               <li key={user._id} className="user-item">
                 <strong>Username:</strong> {user.username} <br />
                 <strong>Email:</strong> {user.email} <br />
+                <strong>Address:</strong> {user.address || 'No address provided'} <br />
                 <strong>Created At:</strong> {new Date(user.createdAt).toLocaleString()} <br />
                 <strong>Updated At:</strong> {new Date(user.updatedAt).toLocaleString()} <br />
                 <button className="delete-button" onClick={() => handleDelete(user._id)}>
