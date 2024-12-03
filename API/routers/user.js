@@ -48,7 +48,11 @@ user_router.post('/login', async (req, res) => {
 user_router.get('/user', async (req, res) => {
     try {
         const users = await User.find();
-        res.json(users);
+        const updatedUsers = users.map(user => ({
+            ...user._doc,
+            address: user.address || 'Chưa cập nhật', 
+        }));
+        res.json(updatedUsers);
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Something went wrong' });
