@@ -84,10 +84,13 @@ function Productdetails() {
 
     const renderProduct = (product, onAddToCart, navigate) => (
         <Grid
-            key={product._id}
-            onClick={() => navigate(`/products/${product._id}`)}
-            style={{ cursor: 'pointer' }}
-        >
+              key={product._id}
+        onClick={() => {
+            navigate(`/products/${product._id}`);
+            window.location.reload(); 
+        }}
+        style={{ cursor: 'pointer' }}
+    >
             <div className="similarProductCard">
                 <div className="similarProductImageWrapper">
                     <img
