@@ -210,7 +210,7 @@ const Profile = () => {
                           {orderDetails[order._id].map((detail) => (
                             <div key={detail._id} className="order-detail-item">
                               <p>Sản phẩm: {detail.name_product}</p>
-                              <p>Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.price_product)}</p>
+                              <p>Giá: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(detail.price)}</p>
                               <p>Số lượng: {detail.quantity}</p>
                             </div>
                           ))}
